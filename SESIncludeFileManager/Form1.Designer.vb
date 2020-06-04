@@ -28,7 +28,6 @@ Partial Class Form1
         Me.txtProjectFolder = New System.Windows.Forms.TextBox()
         Me.btnBrowse = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.lstPaths = New System.Windows.Forms.ListBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lstFiles = New System.Windows.Forms.ListBox()
         Me.txtSearchFiles = New System.Windows.Forms.TextBox()
@@ -36,6 +35,10 @@ Partial Class Form1
         Me.btnUpdateProject = New System.Windows.Forms.Button()
         Me.txtProjectFile = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
+        Me.lvPaths = New System.Windows.Forms.ListView()
+        Me.colPath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.colFound = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.chkOnlyShowFilesInSelectedFolder = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'Label1
@@ -72,7 +75,7 @@ Partial Class Form1
         '
         'btnBrowse
         '
-        Me.btnBrowse.Location = New System.Drawing.Point(591, 69)
+        Me.btnBrowse.Location = New System.Drawing.Point(696, 64)
         Me.btnBrowse.Name = "btnBrowse"
         Me.btnBrowse.Size = New System.Drawing.Size(75, 23)
         Me.btnBrowse.TabIndex = 4
@@ -88,18 +91,10 @@ Partial Class Form1
         Me.Label3.TabIndex = 5
         Me.Label3.Text = "Include Paths"
         '
-        'lstPaths
-        '
-        Me.lstPaths.FormattingEnabled = True
-        Me.lstPaths.Location = New System.Drawing.Point(19, 117)
-        Me.lstPaths.Name = "lstPaths"
-        Me.lstPaths.Size = New System.Drawing.Size(223, 342)
-        Me.lstPaths.TabIndex = 6
-        '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(272, 95)
+        Me.Label4.Location = New System.Drawing.Point(317, 95)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(66, 13)
         Me.Label4.TabIndex = 7
@@ -108,21 +103,22 @@ Partial Class Form1
         'lstFiles
         '
         Me.lstFiles.FormattingEnabled = True
-        Me.lstFiles.Location = New System.Drawing.Point(274, 137)
+        Me.lstFiles.Location = New System.Drawing.Point(319, 137)
         Me.lstFiles.Name = "lstFiles"
-        Me.lstFiles.Size = New System.Drawing.Size(238, 316)
+        Me.lstFiles.Size = New System.Drawing.Size(302, 316)
+        Me.lstFiles.Sorted = True
         Me.lstFiles.TabIndex = 8
         '
         'txtSearchFiles
         '
-        Me.txtSearchFiles.Location = New System.Drawing.Point(275, 111)
+        Me.txtSearchFiles.Location = New System.Drawing.Point(320, 111)
         Me.txtSearchFiles.Name = "txtSearchFiles"
-        Me.txtSearchFiles.Size = New System.Drawing.Size(237, 20)
+        Me.txtSearchFiles.Size = New System.Drawing.Size(301, 20)
         Me.txtSearchFiles.TabIndex = 9
         '
         'btnReadProject
         '
-        Me.btnReadProject.Location = New System.Drawing.Point(578, 137)
+        Me.btnReadProject.Location = New System.Drawing.Point(683, 132)
         Me.btnReadProject.Name = "btnReadProject"
         Me.btnReadProject.Size = New System.Drawing.Size(88, 25)
         Me.btnReadProject.TabIndex = 10
@@ -131,7 +127,7 @@ Partial Class Form1
         '
         'btnUpdateProject
         '
-        Me.btnUpdateProject.Location = New System.Drawing.Point(578, 187)
+        Me.btnUpdateProject.Location = New System.Drawing.Point(683, 182)
         Me.btnUpdateProject.Name = "btnUpdateProject"
         Me.btnUpdateProject.Size = New System.Drawing.Size(88, 25)
         Me.btnUpdateProject.TabIndex = 11
@@ -154,11 +150,47 @@ Partial Class Form1
         Me.Label5.TabIndex = 13
         Me.Label5.Text = "SES Project File"
         '
+        'lvPaths
+        '
+        Me.lvPaths.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colPath, Me.colFound})
+        Me.lvPaths.HideSelection = False
+        Me.lvPaths.Location = New System.Drawing.Point(19, 137)
+        Me.lvPaths.Name = "lvPaths"
+        Me.lvPaths.Size = New System.Drawing.Size(294, 316)
+        Me.lvPaths.Sorting = System.Windows.Forms.SortOrder.Ascending
+        Me.lvPaths.TabIndex = 14
+        Me.lvPaths.UseCompatibleStateImageBehavior = False
+        Me.lvPaths.View = System.Windows.Forms.View.Details
+        '
+        'colPath
+        '
+        Me.colPath.DisplayIndex = 1
+        Me.colPath.Text = "Path"
+        Me.colPath.Width = 300
+        '
+        'colFound
+        '
+        Me.colFound.DisplayIndex = 0
+        Me.colFound.Text = ""
+        Me.colFound.Width = 18
+        '
+        'chkOnlyShowFilesInSelectedFolder
+        '
+        Me.chkOnlyShowFilesInSelectedFolder.AutoSize = True
+        Me.chkOnlyShowFilesInSelectedFolder.Location = New System.Drawing.Point(123, 114)
+        Me.chkOnlyShowFilesInSelectedFolder.Name = "chkOnlyShowFilesInSelectedFolder"
+        Me.chkOnlyShowFilesInSelectedFolder.Size = New System.Drawing.Size(190, 17)
+        Me.chkOnlyShowFilesInSelectedFolder.TabIndex = 15
+        Me.chkOnlyShowFilesInSelectedFolder.Text = "Only Show Files In Selected Folder"
+        Me.chkOnlyShowFilesInSelectedFolder.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(693, 476)
+        Me.ClientSize = New System.Drawing.Size(783, 476)
+        Me.Controls.Add(Me.chkOnlyShowFilesInSelectedFolder)
+        Me.Controls.Add(Me.lvPaths)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.txtProjectFile)
         Me.Controls.Add(Me.btnUpdateProject)
@@ -166,7 +198,6 @@ Partial Class Form1
         Me.Controls.Add(Me.txtSearchFiles)
         Me.Controls.Add(Me.lstFiles)
         Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.lstPaths)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.btnBrowse)
         Me.Controls.Add(Me.txtProjectFolder)
@@ -186,7 +217,6 @@ Partial Class Form1
     Friend WithEvents txtProjectFolder As TextBox
     Friend WithEvents btnBrowse As Button
     Friend WithEvents Label3 As Label
-    Friend WithEvents lstPaths As ListBox
     Friend WithEvents Label4 As Label
     Friend WithEvents lstFiles As ListBox
     Friend WithEvents txtSearchFiles As TextBox
@@ -194,4 +224,8 @@ Partial Class Form1
     Friend WithEvents btnUpdateProject As Button
     Friend WithEvents txtProjectFile As TextBox
     Friend WithEvents Label5 As Label
+    Friend WithEvents lvPaths As ListView
+    Friend WithEvents colFound As ColumnHeader
+    Friend WithEvents colPath As ColumnHeader
+    Friend WithEvents chkOnlyShowFilesInSelectedFolder As CheckBox
 End Class
