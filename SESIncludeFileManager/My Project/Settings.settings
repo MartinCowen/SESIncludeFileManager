@@ -1,7 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" UseMySettingsClassName="true">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="SDKFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Bluetooth\Nordic_Semi\nRF5_SDK_12.3.0_d7731ad\</Value>
+    </Setting>
+    <Setting Name="SESProjectFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Bluetooth\Nordic_Semi\nRF5_SDK_12.3.0_d7731ad\examples\ble_central\experimental\ble_app_blinky_c\pca10028\s130\ses\ble_app_blinky_c_pca10028_s130.emProject</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>
