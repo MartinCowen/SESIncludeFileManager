@@ -68,14 +68,26 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("C:\Bluetooth\Nordic_Semi\nRF5_SDK_12.3.0_d7731ad\examples\ble_central\experimenta"& _ 
-            "l\ble_app_blinky_c\pca10028\s130\ses\ble_app_blinky_c_pca10028_s130.emProject")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("ble_app_blinky_c_pca10028_s130.emProject")>  _
         Public Property SESProjectFile() As String
             Get
                 Return CType(Me("SESProjectFile"),String)
             End Get
             Set
                 Me("SESProjectFile") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("C:\Bluetooth\Nordic_Semi\nRF5_SDK_12.3.0_d7731ad\examples\ble_central\experimenta"& _ 
+            "l\ble_app_blinky_c\pca10028\s130\ses")>  _
+        Public Property SESProjectFolder() As String
+            Get
+                Return CType(Me("SESProjectFolder"),String)
+            End Get
+            Set
+                Me("SESProjectFolder") = value
             End Set
         End Property
     End Class

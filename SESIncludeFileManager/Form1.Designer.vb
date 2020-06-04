@@ -25,7 +25,7 @@ Partial Class Form1
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtSDKFolder = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.txtProjectFile = New System.Windows.Forms.TextBox()
+        Me.txtProjectFolder = New System.Windows.Forms.TextBox()
         Me.btnBrowse = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.lstPaths = New System.Windows.Forms.ListBox()
@@ -34,12 +34,14 @@ Partial Class Form1
         Me.txtSearchFiles = New System.Windows.Forms.TextBox()
         Me.btnReadProject = New System.Windows.Forms.Button()
         Me.btnUpdateProject = New System.Windows.Forms.Button()
+        Me.txtProjectFile = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(13, 13)
+        Me.Label1.Location = New System.Drawing.Point(34, 9)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(61, 13)
         Me.Label1.TabIndex = 0
@@ -47,7 +49,7 @@ Partial Class Form1
         '
         'txtSDKFolder
         '
-        Me.txtSDKFolder.Location = New System.Drawing.Point(80, 10)
+        Me.txtSDKFolder.Location = New System.Drawing.Point(107, 6)
         Me.txtSDKFolder.Name = "txtSDKFolder"
         Me.txtSDKFolder.Size = New System.Drawing.Size(391, 20)
         Me.txtSDKFolder.TabIndex = 1
@@ -55,22 +57,22 @@ Partial Class Form1
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 50)
+        Me.Label2.Location = New System.Drawing.Point(12, 39)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(83, 13)
+        Me.Label2.Size = New System.Drawing.Size(96, 13)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "SES Project File"
+        Me.Label2.Text = "SES Project Folder"
         '
-        'txtProjectFile
+        'txtProjectFolder
         '
-        Me.txtProjectFile.Location = New System.Drawing.Point(107, 47)
-        Me.txtProjectFile.Name = "txtProjectFile"
-        Me.txtProjectFile.Size = New System.Drawing.Size(559, 20)
-        Me.txtProjectFile.TabIndex = 3
+        Me.txtProjectFolder.Location = New System.Drawing.Point(107, 36)
+        Me.txtProjectFolder.Name = "txtProjectFolder"
+        Me.txtProjectFolder.Size = New System.Drawing.Size(559, 20)
+        Me.txtProjectFolder.TabIndex = 3
         '
         'btnBrowse
         '
-        Me.btnBrowse.Location = New System.Drawing.Point(578, 73)
+        Me.btnBrowse.Location = New System.Drawing.Point(591, 69)
         Me.btnBrowse.Name = "btnBrowse"
         Me.btnBrowse.Size = New System.Drawing.Size(75, 23)
         Me.btnBrowse.TabIndex = 4
@@ -136,11 +138,29 @@ Partial Class Form1
         Me.btnUpdateProject.Text = "Update Project"
         Me.btnUpdateProject.UseVisualStyleBackColor = True
         '
+        'txtProjectFile
+        '
+        Me.txtProjectFile.Location = New System.Drawing.Point(107, 72)
+        Me.txtProjectFile.Name = "txtProjectFile"
+        Me.txtProjectFile.Size = New System.Drawing.Size(391, 20)
+        Me.txtProjectFile.TabIndex = 12
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(16, 74)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(83, 13)
+        Me.Label5.TabIndex = 13
+        Me.Label5.Text = "SES Project File"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(693, 476)
+        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.txtProjectFile)
         Me.Controls.Add(Me.btnUpdateProject)
         Me.Controls.Add(Me.btnReadProject)
         Me.Controls.Add(Me.txtSearchFiles)
@@ -149,7 +169,7 @@ Partial Class Form1
         Me.Controls.Add(Me.lstPaths)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.btnBrowse)
-        Me.Controls.Add(Me.txtProjectFile)
+        Me.Controls.Add(Me.txtProjectFolder)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.txtSDKFolder)
         Me.Controls.Add(Me.Label1)
@@ -163,7 +183,7 @@ Partial Class Form1
     Friend WithEvents Label1 As Label
     Friend WithEvents txtSDKFolder As TextBox
     Friend WithEvents Label2 As Label
-    Friend WithEvents txtProjectFile As TextBox
+    Friend WithEvents txtProjectFolder As TextBox
     Friend WithEvents btnBrowse As Button
     Friend WithEvents Label3 As Label
     Friend WithEvents lstPaths As ListBox
@@ -172,4 +192,6 @@ Partial Class Form1
     Friend WithEvents txtSearchFiles As TextBox
     Friend WithEvents btnReadProject As Button
     Friend WithEvents btnUpdateProject As Button
+    Friend WithEvents txtProjectFile As TextBox
+    Friend WithEvents Label5 As Label
 End Class
