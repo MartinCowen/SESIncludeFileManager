@@ -1,6 +1,6 @@
 ﻿Imports System.Collections
 Public Class Form1
-
+    Private lstFileNames As List(Of String)
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         txtSDKFolder.Text = My.Settings.SDKFolder
@@ -53,13 +53,15 @@ Public Class Form1
         If chkOnlyShowFilesInSelectedFolder.Checked Then
             'file list is cleared and only shows files from selected folder
 
-            Me.lstFiles.BeginUpdate()
-            Me.lstFiles.Items.Clear()
+            lstFiles.BeginUpdate()
+            lstFiles.Items.Clear()
 
-            Dim lstFiles As List(Of String) = GetListOfFilesInFolder(f)
+            lstFileNames = GetListOfFilesInFolder(f)
 
-            If lstFiles IsNot Nothing Then
-                Me.lstFiles.Items.AddRange(lstFiles.ToArray)
+            Dim lFiles As List(Of String) = lstFileNames
+
+            If lFiles IsNot Nothing Then
+                lstFiles.Items.AddRange(lFiles.ToArray)
             End If
 
             Me.lstFiles.EndUpdate()
@@ -77,4 +79,62 @@ Public Class Form1
         End If
         Return lstFiles
     End Function
+
+    Private Sub chkOnlyShowFilesInSelectedFolder_CheckedChanged(sender As Object, e As EventArgs) Handles chkOnlyShowFilesInSelectedFolder.CheckedChanged
+        If chkOnlyShowFilesInSelectedFolder.Checked = False Then
+            'get list of all files in all folders
+        End If
+    End Sub
+
+    Private Sub txtSearchFiles_TextChanged(sender As Object, e As EventArgs) Handles txtSearchFiles.TextChanged
+        If txtSearchFiles.Text <> "" Then
+
+
+            'Dim arL As New ArrayList
+            'arL = colToArray(lstFileNames)
+
+            'For Each s As String In arL
+
+            '    lstOrig.Add(s)
+            'Next s
+
+
+            'lstOrig.AddRange()
+
+
+
+
+
+            lstFiles.Items.Clear()
+            lstFiles.Items.AddRange(FindFileNamesMatchingString(txtSearchFiles.Text, lstFileNames).ToArray)
+
+        End If
+    End Sub
+    Private Function FindFileNamesMatchingString(s As String, lstOriginal As List(Of String)) As List(Of String)
+        Dim lstFiles As New List(Of String)
+
+        For Each n As String In lstOriginal
+            If n.Contains(s) Then
+                lstFiles.Add(n)
+            End If
+        Next n
+        Return lstFiles
+    End Function
+    Private Function colToArray(c As ListBox.ObjectCollection) As ArrayList
+        Dim ar As New ArrayList
+        ar.AddRange(c)
+
+        'For Each s As String In c
+        '    ar.Ad
+        'Next c
+        'lst.AddRange(c)
+        Return ar
+    End Function
+    'Private Function colToListOfString(c As Collection) As List(Of String)
+    '    Dim lst As New List(Of String)
+    '    For Each s As String In c
+    '        lst.Add()
+    '    Next c
+    '    lst.AddRange(c)
+    'End Function
 End Class

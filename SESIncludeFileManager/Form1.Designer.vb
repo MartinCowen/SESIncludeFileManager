@@ -153,6 +153,7 @@ Partial Class Form1
         'lvPaths
         '
         Me.lvPaths.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colPath, Me.colFound})
+        Me.lvPaths.FullRowSelect = True
         Me.lvPaths.HideSelection = False
         Me.lvPaths.Location = New System.Drawing.Point(19, 137)
         Me.lvPaths.Name = "lvPaths"
