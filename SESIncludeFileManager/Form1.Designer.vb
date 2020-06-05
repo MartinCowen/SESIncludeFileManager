@@ -29,7 +29,7 @@ Partial Class Form1
         Me.btnBrowse = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.lstFiles = New System.Windows.Forms.ListBox()
+        Me.lbFiles = New System.Windows.Forms.ListBox()
         Me.txtSearchFiles = New System.Windows.Forms.TextBox()
         Me.btnReadProject = New System.Windows.Forms.Button()
         Me.btnUpdateProject = New System.Windows.Forms.Button()
@@ -100,14 +100,14 @@ Partial Class Form1
         Me.Label4.TabIndex = 7
         Me.Label4.Text = "Include Files"
         '
-        'lstFiles
+        'lbFiles
         '
-        Me.lstFiles.FormattingEnabled = True
-        Me.lstFiles.Location = New System.Drawing.Point(319, 137)
-        Me.lstFiles.Name = "lstFiles"
-        Me.lstFiles.Size = New System.Drawing.Size(302, 316)
-        Me.lstFiles.Sorted = True
-        Me.lstFiles.TabIndex = 8
+        Me.lbFiles.FormattingEnabled = True
+        Me.lbFiles.Location = New System.Drawing.Point(319, 137)
+        Me.lbFiles.Name = "lbFiles"
+        Me.lbFiles.Size = New System.Drawing.Size(302, 316)
+        Me.lbFiles.Sorted = True
+        Me.lbFiles.TabIndex = 8
         '
         'txtSearchFiles
         '
@@ -197,7 +197,7 @@ Partial Class Form1
         Me.Controls.Add(Me.btnUpdateProject)
         Me.Controls.Add(Me.btnReadProject)
         Me.Controls.Add(Me.txtSearchFiles)
-        Me.Controls.Add(Me.lstFiles)
+        Me.Controls.Add(Me.lbFiles)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.btnBrowse)
@@ -219,7 +219,7 @@ Partial Class Form1
     Friend WithEvents btnBrowse As Button
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
-    Friend WithEvents lstFiles As ListBox
+    Friend WithEvents lbFiles As ListBox
     Friend WithEvents txtSearchFiles As TextBox
     Friend WithEvents btnReadProject As Button
     Friend WithEvents btnUpdateProject As Button

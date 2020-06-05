@@ -1,6 +1,11 @@
 ﻿Imports System.Collections
 Public Class Form1
-    Private lstFileNames As New List(Of String)
+    Private Class FilesInFolder
+        Public filename As String
+        Public folder As String
+    End Class
+
+    Private lstFilesInFolders As New List(Of FilesInFolder)
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         txtSDKFolder.Text = My.Settings.SDKFolder
@@ -17,7 +22,7 @@ Public Class Form1
         'simple string search version
         'Dim s As String = My.Computer.FileSystem.ReadAllText(f)
 
-        Dim teststr As String = "../debug;../../86;../../../../../../components/device;../../../../../../components/toolchain/cmsis/include"
+        Dim teststr As String = "../debug;../;../../../../../../components/device;../../../../../../components/toolchain/cmsis/include"
         Dim lst As Array = teststr.Split(";")
 
         UpdatePathList(lst)
@@ -48,23 +53,30 @@ Public Class Form1
 
         If lvPaths.SelectedItems.Count < 1 Then Exit Sub
 
+
+        RefreshlbFiles()
+    End Sub
+
+    Private Sub RefreshlbFiles()
+        If lvPaths.SelectedItems.Count < 1 Then Exit Sub
         Dim d As String = lvPaths.SelectedItems(0).Text
 
         If chkOnlyShowFilesInSelectedFolder.Checked Then
             'file list is cleared and only shows files from selected folder
 
-            lstFiles.BeginUpdate()
-            lstFiles.Items.Clear()
+            lbFiles.BeginUpdate()
+            lbFiles.Items.Clear()
+            lstFilesInFolders.Clear()
 
-            lstFileNames = GetListOfFilesInFolder(d)
+            For Each s As String In GetListOfFilesInFolder(d)
+                Dim fif As New FilesInFolder
+                fif.filename = s
+                fif.folder = d
+                lstFilesInFolders.Add(fif)
+                lbFiles.Items.Add(fif.filename)
+            Next s
 
-            Dim lFiles As List(Of String) = lstFileNames
-
-            If lFiles IsNot Nothing Then
-                lstFiles.Items.AddRange(lFiles.ToArray)
-            End If
-
-            Me.lstFiles.EndUpdate()
+            Me.lbFiles.EndUpdate()
         End If
     End Sub
 
@@ -83,33 +95,40 @@ Public Class Form1
     Private Sub chkOnlyShowFilesInSelectedFolder_CheckedChanged(sender As Object, e As EventArgs) Handles chkOnlyShowFilesInSelectedFolder.CheckedChanged
         If chkOnlyShowFilesInSelectedFolder.Checked = False Then
             'get list of all files in all folders
-            lstFileNames.Clear()
-            lstFiles.BeginUpdate()
-            lstFiles.Items.Clear()
+            lstFilesInFolders.Clear()
+            lbFiles.BeginUpdate()
+            lbFiles.Items.Clear()
 
             For Each lvi As ListViewItem In lvPaths.Items
                 Dim d As String = lvi.Text
                 If My.Computer.FileSystem.DirectoryExists(d) Then
-                    Dim lfiles As List(Of String)
-                    lfiles = GetListOfFilesInFolder(d)
-                    If lfiles IsNot Nothing Then
-                        lstFileNames.AddRange(lfiles.ToArray)
-                    End If
+                    For Each s As String In GetListOfFilesInFolder(d)
+                        Dim fif As New FilesInFolder
+                        fif.filename = s
+                        fif.folder = d
+                        lstFilesInFolders.Add(fif)
+                        lbFiles.Items.Add(fif.filename)
+                    Next s
                 End If
             Next lvi
 
-            lstFiles.Items.AddRange(lstFileNames.ToArray)
+            lbFiles.EndUpdate()
+        Else 'chk is true
+            'refresh showing only files in folder
+            RefreshlbFiles()
 
-
-            lstFiles.EndUpdate()
         End If
     End Sub
 
     Private Sub txtSearchFiles_TextChanged(sender As Object, e As EventArgs) Handles txtSearchFiles.TextChanged
         If txtSearchFiles.Text <> "" Then
 
-            lstFiles.Items.Clear()
-            lstFiles.Items.AddRange(FindFileNamesMatchingString(txtSearchFiles.Text, lstFileNames).ToArray)
+            lbFiles.Items.Clear()
+            Dim lstFileNames As New List(Of String)
+            For Each fif As FilesInFolder In lstFilesInFolders
+                lstFileNames.Add(fif.filename)
+            Next fif
+            lbFiles.Items.AddRange(FindFileNamesMatchingString(txtSearchFiles.Text, lstFileNames).ToArray)
 
         End If
     End Sub
@@ -123,21 +142,32 @@ Public Class Form1
         Next n
         Return lstFiles
     End Function
-    Private Function colToArray(c As ListBox.ObjectCollection) As ArrayList
-        Dim ar As New ArrayList
-        ar.AddRange(c)
 
-        'For Each s As String In c
-        '    ar.Ad
-        'Next c
-        'lst.AddRange(c)
-        Return ar
+
+    Private Sub lstFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbFiles.SelectedIndexChanged
+        If chkOnlyShowFilesInSelectedFolder.Checked = False Then
+            Dim d As String = FindFolderForFile(lbFiles.Items(lbFiles.SelectedIndex).ToString)
+            If d <> "" Then
+                'highlight folder
+                For Each lvi As ListViewItem In lvPaths.Items
+                    If lvi.Text = d Then
+                        lvi.Selected = True
+                    Else
+                        lvi.Selected = False
+                    End If
+                Next lvi
+            Else
+                'not found
+            End If
+        End If
+    End Sub
+    Private Function FindFolderForFile(f As String) As String
+
+        'reverse lookup, find the folder for this file
+        For Each fif As FilesInFolder In lstFilesInFolders
+            If fif.filename = f Then Return fif.folder
+        Next fif
+        Return "" 'not found
     End Function
-    'Private Function colToListOfString(c As Collection) As List(Of String)
-    '    Dim lst As New List(Of String)
-    '    For Each s As String In c
-    '        lst.Add()
-    '    Next c
-    '    lst.AddRange(c)
-    'End Function
+
 End Class

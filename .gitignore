@@ -353,3 +353,4 @@ Debug/
 *.vcxproj
 *.vcxproj.filters
 
+SESIncludeFileManager/bin/
