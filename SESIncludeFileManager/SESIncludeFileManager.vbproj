@@ -92,6 +92,7 @@
     <Import Include="System.Diagnostics" />
     <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
+    <Import Include="System.Xml" />
     <Import Include="System.Xml.Linq" />
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>

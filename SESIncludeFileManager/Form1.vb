@@ -12,6 +12,7 @@ Public Class Form1
         txtProjectFolder.Text = My.Settings.SESProjectFolder
         txtProjectFile.Text = My.Settings.SESProjectFile
 
+
     End Sub
 
     Private Sub btnReadProject_Click(sender As Object, e As EventArgs) Handles btnReadProject.Click
@@ -19,12 +20,27 @@ Public Class Form1
         RefreshlbFiles()
     End Sub
 
-    Private Sub ReadAndParseProjectFile(f As String)
-        'simple string search version
-        'Dim s As String = My.Computer.FileSystem.ReadAllText(f)
+    Private Sub ReadAndParseProjectFile(filename As String)
 
-        Dim teststr As String = "../debug;../;../../../../../../components/device;../../../../../../components/toolchain/cmsis/include"
-        Dim lst As Array = teststr.Split(";")
+        Dim xmlDoc As XmlDocument = New XmlDocument()
+
+        Try
+            xmlDoc.Load(filename)
+        Catch ex As Exception
+            MessageBox.Show("error loading file " & filename & " as XML " & ex.ToString)
+        End Try
+
+        Dim sIncludes As String
+
+        Try
+            sIncludes = xmlDoc.SelectSingleNode("solution/project/configuration[@c_user_include_directories]").Attributes("c_user_include_directories").Value
+        Catch ex As Exception
+            MessageBox.Show("Format of project file is unexpected")
+            Exit Sub
+        End Try
+
+        ' Dim teststr As String = "../debug;../;../../../../../../components/device;../../../../../../components/toolchain/cmsis/include"
+        Dim lst As Array = sIncludes.Split(";")
 
         UpdatePathList(lst)
 
@@ -40,7 +56,7 @@ Public Class Form1
 
             lvi.Text = p
 
-            If Not My.Computer.FileSystem.DirectoryExists(p) Then
+            If Not DoesDirectoryExist(p) Then
                 lvi.SubItems.Add("!")
             End If
 
@@ -49,6 +65,17 @@ Public Class Form1
 
         lvPaths.EndUpdate()
     End Sub
+
+    ''' <summary>
+    ''' Checks for folder existing relative to the reference path
+    ''' </summary>
+    ''' <param name="p">additional path</param>
+    ''' <returns></returns>
+    Private Function DoesDirectoryExist(p As String) As Boolean
+        Return My.Computer.FileSystem.DirectoryExists(My.Computer.FileSystem.CombinePath(txtProjectFolder.Text, p))
+    End Function
+
+
 
     Private Sub lvPaths_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lvPaths.SelectedIndexChanged
 
@@ -81,7 +108,7 @@ Public Class Form1
 
             For Each lvi As ListViewItem In lvPaths.Items
                 Dim d As String = lvi.Text
-                If My.Computer.FileSystem.DirectoryExists(d) Then
+                If DoesDirectoryExist(d) Then
                     For Each s As String In GetListOfFilesInFolder(d)
                         Dim fif As New FilesInFolder
                         fif.filename = s
@@ -100,8 +127,8 @@ Public Class Form1
     Private Function GetListOfFilesInFolder(folder As String) As List(Of String)
         Dim res As Array = Nothing
         Dim lstFiles As New List(Of String)
-        If My.Computer.FileSystem.DirectoryExists(folder) Then
-            res = My.Computer.FileSystem.GetFiles(folder, FileIO.SearchOption.SearchTopLevelOnly, "*.h").ToArray
+        If DoesDirectoryExist(folder) Then
+            res = My.Computer.FileSystem.GetFiles(My.Computer.FileSystem.CombinePath(txtProjectFolder.Text, folder), FileIO.SearchOption.SearchTopLevelOnly, "*.h").ToArray
             For Each n As String In res
                 lstFiles.Add(My.Computer.FileSystem.GetName(n))
             Next n
@@ -170,6 +197,7 @@ Public Class Form1
         'select a folder not a file, see https://stackoverflow.com/q/31059
 
         Try
+            openFileDialog.Title = "SDK Root Folder"
             openFileDialog.Filter = "folder|*.folders"
             openFileDialog.FileName = "Folder Selection"
             openFileDialog.ValidateNames = False
@@ -193,6 +221,7 @@ Public Class Form1
         'selects folder and file for different text boxes
 
         Try
+            openFileDialog.Title = "SES Project Folder"
             openFileDialog.Filter = "SES Project|*.emProject"
             openFileDialog.FileName = txtProjectFile.Text
             openFileDialog.ValidateNames = False
@@ -213,4 +242,7 @@ Public Class Form1
 
         End Try
     End Sub
+
+
+
 End Class

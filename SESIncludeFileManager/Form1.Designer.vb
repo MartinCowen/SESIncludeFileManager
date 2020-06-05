@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Form1
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class Form1
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtSDKFolder = New System.Windows.Forms.TextBox()
@@ -40,6 +40,8 @@ Partial Class Form1
         Me.colFound = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.chkOnlyShowFilesInSelectedFolder = New System.Windows.Forms.CheckBox()
         Me.btnBrowseSDK = New System.Windows.Forms.Button()
+        Me.lblCountFolders = New System.Windows.Forms.Label()
+        Me.lblCountFiles = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -86,7 +88,7 @@ Partial Class Form1
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(16, 100)
+        Me.Label3.Location = New System.Drawing.Point(16, 112)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(72, 13)
         Me.Label3.TabIndex = 5
@@ -95,7 +97,7 @@ Partial Class Form1
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(317, 95)
+        Me.Label4.Location = New System.Drawing.Point(317, 107)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(66, 13)
         Me.Label4.TabIndex = 7
@@ -104,22 +106,22 @@ Partial Class Form1
         'lbFiles
         '
         Me.lbFiles.FormattingEnabled = True
-        Me.lbFiles.Location = New System.Drawing.Point(319, 137)
+        Me.lbFiles.Location = New System.Drawing.Point(342, 149)
         Me.lbFiles.Name = "lbFiles"
-        Me.lbFiles.Size = New System.Drawing.Size(302, 316)
+        Me.lbFiles.Size = New System.Drawing.Size(279, 316)
         Me.lbFiles.Sorted = True
         Me.lbFiles.TabIndex = 8
         '
         'txtSearchFiles
         '
-        Me.txtSearchFiles.Location = New System.Drawing.Point(320, 111)
+        Me.txtSearchFiles.Location = New System.Drawing.Point(342, 123)
         Me.txtSearchFiles.Name = "txtSearchFiles"
-        Me.txtSearchFiles.Size = New System.Drawing.Size(301, 20)
+        Me.txtSearchFiles.Size = New System.Drawing.Size(279, 20)
         Me.txtSearchFiles.TabIndex = 9
         '
         'btnReadProject
         '
-        Me.btnReadProject.Location = New System.Drawing.Point(683, 132)
+        Me.btnReadProject.Location = New System.Drawing.Point(683, 191)
         Me.btnReadProject.Name = "btnReadProject"
         Me.btnReadProject.Size = New System.Drawing.Size(88, 25)
         Me.btnReadProject.TabIndex = 10
@@ -128,12 +130,13 @@ Partial Class Form1
         '
         'btnUpdateProject
         '
-        Me.btnUpdateProject.Location = New System.Drawing.Point(683, 182)
+        Me.btnUpdateProject.Location = New System.Drawing.Point(683, 244)
         Me.btnUpdateProject.Name = "btnUpdateProject"
         Me.btnUpdateProject.Size = New System.Drawing.Size(88, 25)
         Me.btnUpdateProject.TabIndex = 11
         Me.btnUpdateProject.Text = "Update Project"
         Me.btnUpdateProject.UseVisualStyleBackColor = True
+        Me.btnUpdateProject.Visible = False
         '
         'txtProjectFile
         '
@@ -156,9 +159,9 @@ Partial Class Form1
         Me.lvPaths.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colPath, Me.colFound})
         Me.lvPaths.FullRowSelect = True
         Me.lvPaths.HideSelection = False
-        Me.lvPaths.Location = New System.Drawing.Point(19, 137)
+        Me.lvPaths.Location = New System.Drawing.Point(19, 149)
         Me.lvPaths.Name = "lvPaths"
-        Me.lvPaths.Size = New System.Drawing.Size(294, 316)
+        Me.lvPaths.Size = New System.Drawing.Size(317, 316)
         Me.lvPaths.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.lvPaths.TabIndex = 14
         Me.lvPaths.UseCompatibleStateImageBehavior = False
@@ -179,7 +182,7 @@ Partial Class Form1
         'chkOnlyShowFilesInSelectedFolder
         '
         Me.chkOnlyShowFilesInSelectedFolder.AutoSize = True
-        Me.chkOnlyShowFilesInSelectedFolder.Location = New System.Drawing.Point(123, 114)
+        Me.chkOnlyShowFilesInSelectedFolder.Location = New System.Drawing.Point(123, 126)
         Me.chkOnlyShowFilesInSelectedFolder.Name = "chkOnlyShowFilesInSelectedFolder"
         Me.chkOnlyShowFilesInSelectedFolder.Size = New System.Drawing.Size(190, 17)
         Me.chkOnlyShowFilesInSelectedFolder.TabIndex = 15
@@ -195,11 +198,35 @@ Partial Class Form1
         Me.btnBrowseSDK.Text = "Browse"
         Me.btnBrowseSDK.UseVisualStyleBackColor = True
         '
+        'lblCountFolders
+        '
+        Me.lblCountFolders.AutoSize = True
+        Me.lblCountFolders.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblCountFolders.Location = New System.Drawing.Point(19, 474)
+        Me.lblCountFolders.Name = "lblCountFolders"
+        Me.lblCountFolders.Size = New System.Drawing.Size(110, 15)
+        Me.lblCountFolders.TabIndex = 17
+        Me.lblCountFolders.Text = "Total: _ Not Found: _"
+        Me.lblCountFolders.Visible = False
+        '
+        'lblCountFiles
+        '
+        Me.lblCountFiles.AutoSize = True
+        Me.lblCountFiles.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblCountFiles.Location = New System.Drawing.Point(320, 474)
+        Me.lblCountFiles.Name = "lblCountFiles"
+        Me.lblCountFiles.Size = New System.Drawing.Size(45, 15)
+        Me.lblCountFiles.TabIndex = 18
+        Me.lblCountFiles.Text = "Total: _"
+        Me.lblCountFiles.Visible = False
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(783, 476)
+        Me.ClientSize = New System.Drawing.Size(783, 498)
+        Me.Controls.Add(Me.lblCountFiles)
+        Me.Controls.Add(Me.lblCountFolders)
         Me.Controls.Add(Me.btnBrowseSDK)
         Me.Controls.Add(Me.chkOnlyShowFilesInSelectedFolder)
         Me.Controls.Add(Me.lvPaths)
@@ -241,4 +268,6 @@ Partial Class Form1
     Friend WithEvents colPath As ColumnHeader
     Friend WithEvents chkOnlyShowFilesInSelectedFolder As CheckBox
     Friend WithEvents btnBrowseSDK As Button
+    Friend WithEvents lblCountFolders As Label
+    Friend WithEvents lblCountFiles As Label
 End Class
