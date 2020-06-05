@@ -16,6 +16,7 @@ Public Class Form1
 
     Private Sub btnReadProject_Click(sender As Object, e As EventArgs) Handles btnReadProject.Click
         ReadAndParseProjectFile(IO.Path.Combine(txtProjectFolder.Text, txtProjectFile.Text))
+        RefreshlbFiles()
     End Sub
 
     Private Sub ReadAndParseProjectFile(f As String)
@@ -53,20 +54,19 @@ Public Class Form1
 
         If lvPaths.SelectedItems.Count < 1 Then Exit Sub
 
-
         RefreshlbFiles()
     End Sub
 
     Private Sub RefreshlbFiles()
-        If lvPaths.SelectedItems.Count < 1 Then Exit Sub
-        Dim d As String = lvPaths.SelectedItems(0).Text
 
-        If chkOnlyShowFilesInSelectedFolder.Checked Then
+
+        lbFiles.BeginUpdate()
+        lbFiles.Items.Clear()
+        lstFilesInFolders.Clear()
+
+        If chkOnlyShowFilesInSelectedFolder.Checked AndAlso lvPaths.SelectedItems.Count > 0 Then
             'file list is cleared and only shows files from selected folder
-
-            lbFiles.BeginUpdate()
-            lbFiles.Items.Clear()
-            lstFilesInFolders.Clear()
+            Dim d As String = lvPaths.SelectedItems(0).Text
 
             For Each s As String In GetListOfFilesInFolder(d)
                 Dim fif As New FilesInFolder
@@ -76,8 +76,25 @@ Public Class Form1
                 lbFiles.Items.Add(fif.filename)
             Next s
 
-            Me.lbFiles.EndUpdate()
+        Else 'unchecked
+            'get list of all files in all folders
+
+            For Each lvi As ListViewItem In lvPaths.Items
+                Dim d As String = lvi.Text
+                If My.Computer.FileSystem.DirectoryExists(d) Then
+                    For Each s As String In GetListOfFilesInFolder(d)
+                        Dim fif As New FilesInFolder
+                        fif.filename = s
+                        fif.folder = d
+                        lstFilesInFolders.Add(fif)
+                        lbFiles.Items.Add(fif.filename)
+                    Next s
+                End If
+            Next lvi
+
         End If
+
+        lbFiles.EndUpdate()
     End Sub
 
     Private Function GetListOfFilesInFolder(folder As String) As List(Of String)
@@ -93,31 +110,9 @@ Public Class Form1
     End Function
 
     Private Sub chkOnlyShowFilesInSelectedFolder_CheckedChanged(sender As Object, e As EventArgs) Handles chkOnlyShowFilesInSelectedFolder.CheckedChanged
-        If chkOnlyShowFilesInSelectedFolder.Checked = False Then
-            'get list of all files in all folders
-            lstFilesInFolders.Clear()
-            lbFiles.BeginUpdate()
-            lbFiles.Items.Clear()
 
-            For Each lvi As ListViewItem In lvPaths.Items
-                Dim d As String = lvi.Text
-                If My.Computer.FileSystem.DirectoryExists(d) Then
-                    For Each s As String In GetListOfFilesInFolder(d)
-                        Dim fif As New FilesInFolder
-                        fif.filename = s
-                        fif.folder = d
-                        lstFilesInFolders.Add(fif)
-                        lbFiles.Items.Add(fif.filename)
-                    Next s
-                End If
-            Next lvi
+        RefreshlbFiles()
 
-            lbFiles.EndUpdate()
-        Else 'chk is true
-            'refresh showing only files in folder
-            RefreshlbFiles()
-
-        End If
     End Sub
 
     Private Sub txtSearchFiles_TextChanged(sender As Object, e As EventArgs) Handles txtSearchFiles.TextChanged
@@ -170,4 +165,52 @@ Public Class Form1
         Return "" 'not found
     End Function
 
+    Private Sub btnBrowseSDK_Click(sender As Object, e As EventArgs) Handles btnBrowseSDK.Click
+        Dim openFileDialog As OpenFileDialog = New OpenFileDialog()
+        'select a folder not a file, see https://stackoverflow.com/q/31059
+
+        Try
+            openFileDialog.Filter = "folder|*.folders"
+            openFileDialog.FileName = "Folder Selection"
+            openFileDialog.ValidateNames = False
+            openFileDialog.CheckFileExists = False
+            openFileDialog.CheckPathExists = False
+            openFileDialog.InitialDirectory = txtSDKFolder.Text
+            Dim dialogResult As DialogResult = openFileDialog.ShowDialog
+            If dialogResult = DialogResult.OK Then
+                txtSDKFolder.Text = My.Computer.FileSystem.GetParentPath(openFileDialog.FileName)
+                My.Settings.SDKFolder = txtSDKFolder.Text
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("File error: " & ex.ToString)
+
+        End Try
+    End Sub
+
+    Private Sub btnBrowseProject_Click(sender As Object, e As EventArgs) Handles btnBrowseProject.Click
+        Dim openFileDialog As OpenFileDialog = New OpenFileDialog()
+        'selects folder and file for different text boxes
+
+        Try
+            openFileDialog.Filter = "SES Project|*.emProject"
+            openFileDialog.FileName = txtProjectFile.Text
+            openFileDialog.ValidateNames = False
+            openFileDialog.CheckFileExists = False
+            openFileDialog.CheckPathExists = False
+            openFileDialog.InitialDirectory = txtProjectFolder.Text
+            Dim dialogResult As DialogResult = openFileDialog.ShowDialog
+            If dialogResult = DialogResult.OK Then
+                txtProjectFolder.Text = My.Computer.FileSystem.GetParentPath(openFileDialog.FileName)
+                txtProjectFile.Text = My.Computer.FileSystem.GetName(openFileDialog.FileName)
+
+                My.Settings.SESProjectFolder = txtProjectFolder.Text
+                My.Settings.SESProjectFile = txtProjectFile.Text
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("File error: " & ex.ToString)
+
+        End Try
+    End Sub
 End Class

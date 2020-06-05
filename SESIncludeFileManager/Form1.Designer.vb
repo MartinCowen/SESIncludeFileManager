@@ -26,7 +26,7 @@ Partial Class Form1
         Me.txtSDKFolder = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtProjectFolder = New System.Windows.Forms.TextBox()
-        Me.btnBrowse = New System.Windows.Forms.Button()
+        Me.btnBrowseProject = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lbFiles = New System.Windows.Forms.ListBox()
@@ -39,6 +39,7 @@ Partial Class Form1
         Me.colPath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.colFound = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.chkOnlyShowFilesInSelectedFolder = New System.Windows.Forms.CheckBox()
+        Me.btnBrowseSDK = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Label1
@@ -70,17 +71,17 @@ Partial Class Form1
         '
         Me.txtProjectFolder.Location = New System.Drawing.Point(107, 36)
         Me.txtProjectFolder.Name = "txtProjectFolder"
-        Me.txtProjectFolder.Size = New System.Drawing.Size(559, 20)
+        Me.txtProjectFolder.Size = New System.Drawing.Size(664, 20)
         Me.txtProjectFolder.TabIndex = 3
         '
-        'btnBrowse
+        'btnBrowseProject
         '
-        Me.btnBrowse.Location = New System.Drawing.Point(696, 64)
-        Me.btnBrowse.Name = "btnBrowse"
-        Me.btnBrowse.Size = New System.Drawing.Size(75, 23)
-        Me.btnBrowse.TabIndex = 4
-        Me.btnBrowse.Text = "Browse"
-        Me.btnBrowse.UseVisualStyleBackColor = True
+        Me.btnBrowseProject.Location = New System.Drawing.Point(696, 64)
+        Me.btnBrowseProject.Name = "btnBrowseProject"
+        Me.btnBrowseProject.Size = New System.Drawing.Size(75, 23)
+        Me.btnBrowseProject.TabIndex = 4
+        Me.btnBrowseProject.Text = "Browse"
+        Me.btnBrowseProject.UseVisualStyleBackColor = True
         '
         'Label3
         '
@@ -185,11 +186,21 @@ Partial Class Form1
         Me.chkOnlyShowFilesInSelectedFolder.Text = "Only Show Files In Selected Folder"
         Me.chkOnlyShowFilesInSelectedFolder.UseVisualStyleBackColor = True
         '
+        'btnBrowseSDK
+        '
+        Me.btnBrowseSDK.Location = New System.Drawing.Point(521, 4)
+        Me.btnBrowseSDK.Name = "btnBrowseSDK"
+        Me.btnBrowseSDK.Size = New System.Drawing.Size(75, 23)
+        Me.btnBrowseSDK.TabIndex = 16
+        Me.btnBrowseSDK.Text = "Browse"
+        Me.btnBrowseSDK.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(783, 476)
+        Me.Controls.Add(Me.btnBrowseSDK)
         Me.Controls.Add(Me.chkOnlyShowFilesInSelectedFolder)
         Me.Controls.Add(Me.lvPaths)
         Me.Controls.Add(Me.Label5)
@@ -200,7 +211,7 @@ Partial Class Form1
         Me.Controls.Add(Me.lbFiles)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.btnBrowse)
+        Me.Controls.Add(Me.btnBrowseProject)
         Me.Controls.Add(Me.txtProjectFolder)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.txtSDKFolder)
@@ -216,7 +227,7 @@ Partial Class Form1
     Friend WithEvents txtSDKFolder As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents txtProjectFolder As TextBox
-    Friend WithEvents btnBrowse As Button
+    Friend WithEvents btnBrowseProject As Button
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents lbFiles As ListBox
@@ -229,4 +240,5 @@ Partial Class Form1
     Friend WithEvents colFound As ColumnHeader
     Friend WithEvents colPath As ColumnHeader
     Friend WithEvents chkOnlyShowFilesInSelectedFolder As CheckBox
+    Friend WithEvents btnBrowseSDK As Button
 End Class
