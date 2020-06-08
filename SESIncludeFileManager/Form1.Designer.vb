@@ -97,7 +97,7 @@ Partial Class Form1
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(317, 107)
+        Me.Label4.Location = New System.Drawing.Point(339, 107)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(66, 13)
         Me.Label4.TabIndex = 7
@@ -182,7 +182,7 @@ Partial Class Form1
         'chkOnlyShowFilesInSelectedFolder
         '
         Me.chkOnlyShowFilesInSelectedFolder.AutoSize = True
-        Me.chkOnlyShowFilesInSelectedFolder.Location = New System.Drawing.Point(123, 126)
+        Me.chkOnlyShowFilesInSelectedFolder.Location = New System.Drawing.Point(143, 123)
         Me.chkOnlyShowFilesInSelectedFolder.Name = "chkOnlyShowFilesInSelectedFolder"
         Me.chkOnlyShowFilesInSelectedFolder.Size = New System.Drawing.Size(190, 17)
         Me.chkOnlyShowFilesInSelectedFolder.TabIndex = 15

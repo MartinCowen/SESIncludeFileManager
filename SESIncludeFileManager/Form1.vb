@@ -40,8 +40,8 @@ Public Class Form1
             Exit Sub
         End Try
 
-        ' Dim teststr As String = "../debug;../;../../../../../../components/device;../../../../../../components/toolchain/cmsis/include"
-        Dim lst As Array = sIncludes.Split(";")
+        '//>sIncludes = "../debug;../;../../../../../../components/device;../../../../../../components/toolchain/cmsis/include"
+        Dim lst As Array = sIncludes.Split(";".ToCharArray, StringSplitOptions.RemoveEmptyEntries)
 
         UpdatePathList(lst)
 
@@ -68,6 +68,8 @@ Public Class Form1
 
         lvPaths.EndUpdate()
         RefreshCountFolders()
+        RefreshlbFiles() 'must also refresh lstFilesInFolders
+
     End Sub
 
     ''' <summary>
@@ -90,7 +92,6 @@ Public Class Form1
     End Sub
 
     Private Sub RefreshlbFiles()
-
 
         lbFiles.BeginUpdate()
         lbFiles.Items.Clear()
@@ -277,5 +278,38 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub lvPaths_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles lvPaths.MouseDoubleClick
+        Dim lv As ListView = DirectCast(sender, ListView)
 
+        Dim lvi As ListViewItem = lv.HitTest(e.Location).Item
+        If lvi IsNot Nothing Then
+            Dim newname As String = InputBox("New Value ",, lvi.Text)
+            If newname <> "" Then
+                'update internal structures and lists
+                lstFileInFolder_NewFolderName(lvi.Text, newname)
+                lvi.Text = newname
+            End If
+        End If
+    End Sub
+
+    Private Function lstFileInFolder_NewFolderName(oName As String, nName As String) As Boolean
+        Dim success As Boolean = False
+        For Each fif As FilesInFolder In lstFilesInFolders
+            If fif.folder = oName Then
+                fif.folder = nName
+
+                UpdatePathList(FiF_FoldersToArray(lstFilesInFolders))
+                success = True
+            End If
+        Next fif
+        Return success 'no path found, maybe that path had no files in it.
+    End Function
+
+    Private Function FiF_FoldersToArray(lFiF As List(Of FilesInFolder)) As Array
+        Dim ar(lFiF.Count) As String
+        For i As Integer = 0 To lFiF.Count - 1
+            ar(i) = lFiF.Item(i).folder
+        Next i
+        Return ar
+    End Function
 End Class
