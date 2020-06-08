@@ -207,18 +207,16 @@ Partial Class Form1
         Me.lblCountFolders.Size = New System.Drawing.Size(110, 15)
         Me.lblCountFolders.TabIndex = 17
         Me.lblCountFolders.Text = "Total: _ Not Found: _"
-        Me.lblCountFolders.Visible = False
         '
         'lblCountFiles
         '
         Me.lblCountFiles.AutoSize = True
         Me.lblCountFiles.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblCountFiles.Location = New System.Drawing.Point(320, 474)
+        Me.lblCountFiles.Location = New System.Drawing.Point(342, 474)
         Me.lblCountFiles.Name = "lblCountFiles"
         Me.lblCountFiles.Size = New System.Drawing.Size(45, 15)
         Me.lblCountFiles.TabIndex = 18
         Me.lblCountFiles.Text = "Total: _"
-        Me.lblCountFiles.Visible = False
         '
         'Form1
         '

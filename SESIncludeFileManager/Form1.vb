@@ -6,6 +6,7 @@ Public Class Form1
     End Class
 
     Private lstFilesInFolders As New List(Of FilesInFolder)
+    Private bManualSelectFile As Boolean
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         txtSDKFolder.Text = My.Settings.SDKFolder
@@ -58,12 +59,15 @@ Public Class Form1
 
             If Not DoesDirectoryExist(p) Then
                 lvi.SubItems.Add("!")
+            Else
+                lvi.SubItems.Add("")
             End If
 
             lvPaths.Items.Add(lvi)
         Next p
 
         lvPaths.EndUpdate()
+        RefreshCountFolders()
     End Sub
 
     ''' <summary>
@@ -80,8 +84,9 @@ Public Class Form1
     Private Sub lvPaths_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lvPaths.SelectedIndexChanged
 
         If lvPaths.SelectedItems.Count < 1 Then Exit Sub
-
-        RefreshlbFiles()
+        If Not bManualSelectFile Then
+            RefreshlbFiles()
+        End If
     End Sub
 
     Private Sub RefreshlbFiles()
@@ -122,7 +127,21 @@ Public Class Form1
         End If
 
         lbFiles.EndUpdate()
+
+        lblCountFiles.Text = "Total: " & lbFiles.Items.Count
+
     End Sub
+
+    Private Sub RefreshCountFolders()
+        Dim notfoundcount As Integer = 0
+        For Each lvi As ListViewItem In lvPaths.Items
+            If lvi.SubItems(1).Text = "!" Then notfoundcount += 1
+        Next lvi
+
+        lblCountFolders.Text = "Total: " & lvPaths.Items.Count.ToString & " Not Found: " & notfoundcount.ToString
+    End Sub
+
+
 
     Private Function GetListOfFilesInFolder(folder As String) As List(Of String)
         Dim res As Array = Nothing
@@ -143,6 +162,12 @@ Public Class Form1
     End Sub
 
     Private Sub txtSearchFiles_TextChanged(sender As Object, e As EventArgs) Handles txtSearchFiles.TextChanged
+        UpdateLbFiles()
+    End Sub
+    Private Sub txtSearchFiles_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSearchFiles.KeyDown
+        If e.KeyCode = Keys.Enter Then UpdateLbFiles()
+    End Sub
+    Private Sub UpdateLbFiles()
         If txtSearchFiles.Text <> "" Then
 
             lbFiles.Items.Clear()
@@ -153,7 +178,11 @@ Public Class Form1
             lbFiles.Items.AddRange(FindFileNamesMatchingString(txtSearchFiles.Text, lstFileNames).ToArray)
 
         End If
+
+        lblCountFiles.Text = "Total: " & lbFiles.Items.Count
+
     End Sub
+
     Private Function FindFileNamesMatchingString(s As String, lstOriginal As List(Of String)) As List(Of String)
         Dim lstFiles As New List(Of String)
 
@@ -171,13 +200,18 @@ Public Class Form1
             Dim d As String = FindFolderForFile(lbFiles.Items(lbFiles.SelectedIndex).ToString)
             If d <> "" Then
                 'highlight folder
+                bManualSelectFile = True
                 For Each lvi As ListViewItem In lvPaths.Items
                     If lvi.Text = d Then
+
                         lvi.Selected = True
+
+                        lvi.EnsureVisible()
                     Else
                         lvi.Selected = False
                     End If
                 Next lvi
+                bManualSelectFile = False
             Else
                 'not found
             End If
@@ -242,7 +276,6 @@ Public Class Form1
 
         End Try
     End Sub
-
 
 
 End Class
