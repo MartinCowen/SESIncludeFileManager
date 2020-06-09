@@ -136,7 +136,6 @@ Partial Class Form1
         Me.btnUpdateProject.TabIndex = 11
         Me.btnUpdateProject.Text = "Update Project"
         Me.btnUpdateProject.UseVisualStyleBackColor = True
-        Me.btnUpdateProject.Visible = False
         '
         'txtProjectFile
         '

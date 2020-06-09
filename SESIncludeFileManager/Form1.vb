@@ -8,6 +8,8 @@ Public Class Form1
     Private lstFilesInFolders As New List(Of FilesInFolder)
     Private bManualSelectFile As Boolean
 
+    Private xmlDoc As XmlDocument = New XmlDocument()
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         txtSDKFolder.Text = My.Settings.SDKFolder
         txtProjectFolder.Text = My.Settings.SESProjectFolder
@@ -23,9 +25,11 @@ Public Class Form1
 
     Private Sub ReadAndParseProjectFile(filename As String)
 
-        Dim xmlDoc As XmlDocument = New XmlDocument()
-
         Try
+            'preserveWhitespace has to be true before load, 'https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmldocument.preservewhitespace?view=netcore-3.1
+
+            xmlDoc.PreserveWhitespace = True
+            xmlDoc.XmlResolver = Nothing
             xmlDoc.Load(filename)
         Catch ex As Exception
             MessageBox.Show("error loading file " & filename & " as XML " & ex.ToString)
@@ -311,5 +315,53 @@ Public Class Form1
             ar(i) = lFiF.Item(i).folder
         Next i
         Return ar
+    End Function
+
+    Private Sub btnUpdateProject_Click(sender As Object, e As EventArgs) Handles btnUpdateProject.Click
+        WriteProjectFile(IO.Path.Combine(txtProjectFolder.Text, txtProjectFile.Text))
+    End Sub
+
+    Private Sub WriteProjectFile(filename As String)
+
+        'make up the includes string
+        Dim sIncludes As String = MakeIncludesString()
+
+        'update the xml node value
+        'xmlDoc.SelectSingleNode("solution/project/configuration[@c_user_include_directories]").Attributes("c_user_include_directories").Value = sIncludes
+
+        'write to file
+        Dim xs As XmlWriterSettings = New XmlWriterSettings()
+        xs.Indent = True
+        xs.NewLineOnAttributes = True
+        xs.OmitXmlDeclaration = True
+
+        Using w As XmlWriter = XmlWriter.Create(filename, xs)
+
+            Dim n As XmlDocument = New XmlDocument()
+            n = xmlDoc.Clone()
+
+            Dim parent As XmlNode = n.DocumentType.ParentNode
+            '4th param in CreateDocumentType has to be Nothing to avoid getting [] in DOCTYPE, which is what you get by default and with empty string
+            parent.ReplaceChild(n.CreateDocumentType("CrossStudio_Project_File", Nothing, Nothing, Nothing), n.DocumentType)
+
+            Try
+                n.Save(w)
+            Catch ex As Exception
+                MessageBox.Show("Error while writing, " & ex.ToString)
+            End Try
+
+            w.Flush()
+            w.Close()
+
+        End Using
+
+    End Sub
+
+    Private Function MakeIncludesString() As String
+        Dim s As String = ""
+        For Each lvi As ListViewItem In lvPaths.Items
+            s &= lvi.Text & ";"
+        Next lvi
+        Return s
     End Function
 End Class
