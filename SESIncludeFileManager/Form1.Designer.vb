@@ -22,6 +22,7 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtSDKFolder = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -42,6 +43,9 @@ Partial Class Form1
         Me.btnBrowseSDK = New System.Windows.Forms.Button()
         Me.lblCountFolders = New System.Windows.Forms.Label()
         Me.lblCountFiles = New System.Windows.Forms.Label()
+        Me.cmsPathPopup = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.mnuRemoveFolder = New System.Windows.Forms.ToolStripMenuItem()
+        Me.cmsPathPopup.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -217,6 +221,18 @@ Partial Class Form1
         Me.lblCountFiles.TabIndex = 18
         Me.lblCountFiles.Text = "Total: _"
         '
+        'cmsPathPopup
+        '
+        Me.cmsPathPopup.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuRemoveFolder})
+        Me.cmsPathPopup.Name = "cmsPathPopup"
+        Me.cmsPathPopup.Size = New System.Drawing.Size(181, 48)
+        '
+        'mnuRemoveFolder
+        '
+        Me.mnuRemoveFolder.Name = "mnuRemoveFolder"
+        Me.mnuRemoveFolder.Size = New System.Drawing.Size(180, 22)
+        Me.mnuRemoveFolder.Text = "Remove Folder"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -242,6 +258,7 @@ Partial Class Form1
         Me.Controls.Add(Me.Label1)
         Me.Name = "Form1"
         Me.Text = "SES Include File Manager"
+        Me.cmsPathPopup.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -267,4 +284,6 @@ Partial Class Form1
     Friend WithEvents btnBrowseSDK As Button
     Friend WithEvents lblCountFolders As Label
     Friend WithEvents lblCountFiles As Label
+    Friend WithEvents cmsPathPopup As ContextMenuStrip
+    Friend WithEvents mnuRemoveFolder As ToolStripMenuItem
 End Class

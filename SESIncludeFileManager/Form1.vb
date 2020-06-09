@@ -44,11 +44,15 @@ Public Class Form1
             Exit Sub
         End Try
 
+
+        Me.Cursor = Cursors.WaitCursor
+
         '//>sIncludes = "../debug;../;../../../../../../components/device;../../../../../../components/toolchain/cmsis/include"
         Dim lst As Array = sIncludes.Split(";".ToCharArray, StringSplitOptions.RemoveEmptyEntries)
 
         UpdatePathList(lst)
 
+        Me.Cursor = Cursors.Default
     End Sub
 
     Private Sub UpdatePathList(lst As Array)
@@ -297,16 +301,16 @@ Public Class Form1
     End Sub
 
     Private Function lstFileInFolder_NewFolderName(oName As String, nName As String) As Boolean
-        Dim success As Boolean = False
+
         For Each fif As FilesInFolder In lstFilesInFolders
             If fif.folder = oName Then
                 fif.folder = nName
 
                 UpdatePathList(FiF_FoldersToArray(lstFilesInFolders))
-                success = True
+                Return True
             End If
         Next fif
-        Return success 'no path found, maybe that path had no files in it.
+        Return False 'no path found, maybe that path had no files in it.
     End Function
 
     Private Function FiF_FoldersToArray(lFiF As List(Of FilesInFolder)) As Array
@@ -327,7 +331,7 @@ Public Class Form1
         Dim sIncludes As String = MakeIncludesString()
 
         'update the xml node value
-        'xmlDoc.SelectSingleNode("solution/project/configuration[@c_user_include_directories]").Attributes("c_user_include_directories").Value = sIncludes
+        xmlDoc.SelectSingleNode("solution/project/configuration[@c_user_include_directories]").Attributes("c_user_include_directories").Value = sIncludes
 
         'write to file
         Dim xs As XmlWriterSettings = New XmlWriterSettings()
@@ -341,7 +345,10 @@ Public Class Form1
             n = xmlDoc.Clone()
 
             Dim parent As XmlNode = n.DocumentType.ParentNode
-            '4th param in CreateDocumentType has to be Nothing to avoid getting [] in DOCTYPE, which is what you get by default and with empty string
+            '4th param in CreateDocumentType has to be Nothing to avoid getting [] in DOCTYPE, which is what you get by default and with empty string - see refs:
+            'https://stackoverflow.com/questions/284394/net-xmldocument-why-doctype-changes-after-save
+            'https://www.vistax64.com/threads/xmldocument-save-with-null-xmlresolver-modifies-doctype-tag.215921/
+            'https://stackoverflow.com/questions/12358061/c-sharp-linq-to-xml-remove-characters-from-the-dtd-header/16451790#16451790
             parent.ReplaceChild(n.CreateDocumentType("CrossStudio_Project_File", Nothing, Nothing, Nothing), n.DocumentType)
 
             Try
@@ -363,5 +370,45 @@ Public Class Form1
             s &= lvi.Text & ";"
         Next lvi
         Return s
+    End Function
+
+    Private Sub lvPaths_MouseDown(sender As Object, e As MouseEventArgs) Handles lvPaths.MouseDown
+        If e.Button = MouseButtons.Right Then
+            cmsPathPopup.Show(CType(sender, Control), e.Location)
+        End If
+    End Sub
+
+    Private Sub mnuRemoveFolder_Click(sender As Object, e As EventArgs) Handles mnuRemoveFolder.Click
+        Dim lvi As ListViewItem
+        If lvPaths.SelectedItems.Count <> 1 Then Exit Sub 'must be exactly one item selected
+        lvi = lvPaths.SelectedItems(0)
+
+        If lvi IsNot Nothing Then
+            If DeleteFolder(lvi.Text) Then
+                UpdatePathList(FiF_FoldersToArray(lstFilesInFolders)) 'problem for folders with no files!
+            Else
+                lvPaths.Items.Remove(lvi)
+                RefreshCountFolders()
+                RefreshlbFiles()
+            End If
+
+        End If
+    End Sub
+
+    Private Function DeleteFolder(s As String) As Boolean
+        'first update the internal data structure
+        Dim found As Boolean = False
+
+
+        'delete all fif entries with this folder name
+        For i As Integer = lstFilesInFolders.Count - 1 To 0 Step -1
+            If lstFilesInFolders(i).folder = s Then
+                lstFilesInFolders.RemoveAt(i)
+                found = True
+            End If
+        Next i
+
+        'does not update path list because would be inefficent for cases when called in a loop
+        Return found
     End Function
 End Class
