@@ -7,7 +7,7 @@ Public Class Form1
 
     Private lstFilesInFolders As New List(Of FilesInFolder)
     Private bManualSelectFile As Boolean
-
+    Private Const NotFoundMarker As String = "!"
     Private xmlDoc As XmlDocument = New XmlDocument()
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -66,7 +66,7 @@ Public Class Form1
             lvi.Text = p
 
             If Not DoesDirectoryExist(p) Then
-                lvi.SubItems.Add("!")
+                lvi.SubItems.Add(NotFoundMarker)
             Else
                 lvi.SubItems.Add("")
             End If
@@ -144,7 +144,7 @@ Public Class Form1
     Private Sub RefreshCountFolders()
         Dim notfoundcount As Integer = 0
         For Each lvi As ListViewItem In lvPaths.Items
-            If lvi.SubItems(1).Text = "!" Then notfoundcount += 1
+            If lvi.SubItems(1).Text = NotFoundMarker Then notfoundcount += 1
         Next lvi
 
         lblCountFolders.Text = "Total: " & lvPaths.Items.Count.ToString & " Not Found: " & notfoundcount.ToString
@@ -336,7 +336,7 @@ Public Class Form1
         'write to file
         Dim xs As XmlWriterSettings = New XmlWriterSettings()
         xs.Indent = True
-        xs.NewLineOnAttributes = True
+        'xs.NewLineOnAttributes = True
         xs.OmitXmlDeclaration = True
 
         Using w As XmlWriter = XmlWriter.Create(filename, xs)
@@ -391,7 +391,6 @@ Public Class Form1
                 RefreshCountFolders()
                 RefreshlbFiles()
             End If
-
         End If
     End Sub
 
@@ -411,4 +410,31 @@ Public Class Form1
         'does not update path list because would be inefficent for cases when called in a loop
         Return found
     End Function
+
+    Private Sub mnuRemoveAllNotFoundFolders_Click(sender As Object, e As EventArgs) Handles mnuRemoveAllNotFoundFolders.Click
+        Dim found As Boolean = False
+        lvPaths.BeginUpdate()
+
+        For i As Integer = lvPaths.Items.Count - 1 To 0 Step -1
+            Dim lvi As ListViewItem = lvPaths.Items(i)
+
+            If lvi.SubItems(1).Text = NotFoundMarker Then
+                If DeleteFolder(lvi.Text) Then
+                    found = True
+                Else
+                    lvPaths.Items.Remove(lvi)
+                End If
+            End If
+        Next i
+        lvPaths.EndUpdate()
+
+        'TODO Test
+        If found Then
+            UpdatePathList(FiF_FoldersToArray(lstFilesInFolders)) 'problem for folders with no files!
+        Else
+            RefreshCountFolders()
+            RefreshlbFiles()
+        End If
+
+    End Sub
 End Class

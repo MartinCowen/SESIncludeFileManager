@@ -45,6 +45,7 @@ Partial Class Form1
         Me.lblCountFiles = New System.Windows.Forms.Label()
         Me.cmsPathPopup = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.mnuRemoveFolder = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuRemoveAllNotFoundFolders = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmsPathPopup.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -223,15 +224,21 @@ Partial Class Form1
         '
         'cmsPathPopup
         '
-        Me.cmsPathPopup.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuRemoveFolder})
+        Me.cmsPathPopup.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuRemoveFolder, Me.mnuRemoveAllNotFoundFolders})
         Me.cmsPathPopup.Name = "cmsPathPopup"
-        Me.cmsPathPopup.Size = New System.Drawing.Size(181, 48)
+        Me.cmsPathPopup.Size = New System.Drawing.Size(236, 70)
         '
         'mnuRemoveFolder
         '
         Me.mnuRemoveFolder.Name = "mnuRemoveFolder"
-        Me.mnuRemoveFolder.Size = New System.Drawing.Size(180, 22)
+        Me.mnuRemoveFolder.Size = New System.Drawing.Size(235, 22)
         Me.mnuRemoveFolder.Text = "Remove Folder"
+        '
+        'mnuRemoveAllNotFoundFolders
+        '
+        Me.mnuRemoveAllNotFoundFolders.Name = "mnuRemoveAllNotFoundFolders"
+        Me.mnuRemoveAllNotFoundFolders.Size = New System.Drawing.Size(235, 22)
+        Me.mnuRemoveAllNotFoundFolders.Text = "Remove All Not Found Folders"
         '
         'Form1
         '
@@ -286,4 +293,5 @@ Partial Class Form1
     Friend WithEvents lblCountFiles As Label
     Friend WithEvents cmsPathPopup As ContextMenuStrip
     Friend WithEvents mnuRemoveFolder As ToolStripMenuItem
+    Friend WithEvents mnuRemoveAllNotFoundFolders As ToolStripMenuItem
 End Class
