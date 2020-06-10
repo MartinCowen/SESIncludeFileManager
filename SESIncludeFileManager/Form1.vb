@@ -8,13 +8,13 @@ Public Class Form1
     Private lstFilesInFolders As New List(Of FilesInFolder)
     Private bManualSelectFile As Boolean
     Private Const NotFoundMarker As String = "!"
-    Private xmlDoc As XmlDocument = New XmlDocument()
+    Private projFileLines() As String 'untrimmed, just each of the orignal lines in an array
+    Private lineEndingChar As String = System.Environment.NewLine 'detect on read, use later on write back to file
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         txtSDKFolder.Text = My.Settings.SDKFolder
         txtProjectFolder.Text = My.Settings.SESProjectFolder
         txtProjectFile.Text = My.Settings.SESProjectFile
-
 
     End Sub
 
@@ -25,27 +25,38 @@ Public Class Form1
 
     Private Sub ReadAndParseProjectFile(filename As String)
 
-        Try
-            'preserveWhitespace has to be true before load, 'https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmldocument.preservewhitespace?view=netcore-3.1
 
-            xmlDoc.PreserveWhitespace = True
-            xmlDoc.XmlResolver = Nothing
-            xmlDoc.Load(filename)
-        Catch ex As Exception
-            MessageBox.Show("error loading file " & filename & " as XML " & ex.ToString)
-        End Try
-
-        Dim sIncludes As String
+        Dim wholeFile As String = ""
 
         Try
-            sIncludes = xmlDoc.SelectSingleNode("solution/project/configuration[@c_user_include_directories]").Attributes("c_user_include_directories").Value
+            wholeFile = My.Computer.FileSystem.ReadAllText(filename)
         Catch ex As Exception
-            MessageBox.Show("Format of project file is unexpected")
-            Exit Sub
+            MessageBox.Show("error loading file " & filename & " - " & ex.ToString)
         End Try
 
+        'auto detect line ending
+        If wholeFile.Contains(vbCrLf) Then
+            lineEndingChar = vbCrLf
+        ElseIf wholeFile.Contains(vbLf) Then
+            lineEndingChar = vbLf
+        ElseIf wholeFile.Contains(vbCr) Then
+            lineEndingChar = vbCr
+        End If
 
-        Me.Cursor = Cursors.WaitCursor
+        projFileLines = wholeFile.Split(lineEndingChar)
+
+        'find the user includes line
+        Dim sIncludes As String = ""
+        Dim foundincludesline As Boolean = False
+        For Each lineStr As String In projFileLines
+            If lineStr.Contains("c_user_include_directories") Then
+                'remove everything except the value of the attribute
+                sIncludes = lineStr.Trim.Replace("c_user_include_directories=", "").Replace("""", "")
+                foundincludesline = True
+            End If
+        Next lineStr
+
+        If Not foundincludesline Then MessageBox.Show("Project file does not include a line with c_user_include_directories")
 
         '//>sIncludes = "../debug;../;../../../../../../components/device;../../../../../../components/toolchain/cmsis/include"
         Dim lst As Array = sIncludes.Split(";".ToCharArray, StringSplitOptions.RemoveEmptyEntries)
@@ -330,38 +341,39 @@ Public Class Form1
         'make up the includes string
         Dim sIncludes As String = MakeIncludesString()
 
-        'update the xml node value
-        xmlDoc.SelectSingleNode("solution/project/configuration[@c_user_include_directories]").Attributes("c_user_include_directories").Value = sIncludes
+        'update the line in the array of strings that is the project file
+
+        Dim foundincludesline As Boolean = False
+        For i As Integer = 0 To projFileLines.Count - 1
+            Dim lineStr As String = projFileLines(i)
+            If lineStr.Contains("c_user_include_directories") Then
+                'replace the value of the attribute. preserve original text prior to =, add quotes
+                projFileLines(i) = lineStr.Split("=")(0) & "=""" & sIncludes & """"
+                foundincludesline = True
+            End If
+        Next i
+
+        If Not foundincludesline Then
+            MessageBox.Show("Error - did not find c_user_include_directories to replace!")
+            Exit Sub
+        End If
 
         'write to file
-        Dim xs As XmlWriterSettings = New XmlWriterSettings()
-        xs.Indent = True
-        'xs.NewLineOnAttributes = True
-        xs.OmitXmlDeclaration = True
 
-        Using w As XmlWriter = XmlWriter.Create(filename, xs)
+        Dim wholeFile As String = ""
+        'For Each lineStr As String In projFileLines
+        '    wholeFile &= lineStr & lineEndingChar
+        'Next lineStr
 
-            Dim n As XmlDocument = New XmlDocument()
-            n = xmlDoc.Clone()
+        For i As Integer = 0 To projFileLines.Count - 2 'eliminate final blank line
+            wholeFile &= projFileLines(i) & lineEndingChar
+        Next i
 
-            Dim parent As XmlNode = n.DocumentType.ParentNode
-            '4th param in CreateDocumentType has to be Nothing to avoid getting [] in DOCTYPE, which is what you get by default and with empty string - see refs:
-            'https://stackoverflow.com/questions/284394/net-xmldocument-why-doctype-changes-after-save
-            'https://www.vistax64.com/threads/xmldocument-save-with-null-xmlresolver-modifies-doctype-tag.215921/
-            'https://stackoverflow.com/questions/12358061/c-sharp-linq-to-xml-remove-characters-from-the-dtd-header/16451790#16451790
-            parent.ReplaceChild(n.CreateDocumentType("CrossStudio_Project_File", Nothing, Nothing, Nothing), n.DocumentType)
-
-            Try
-                n.Save(w)
-            Catch ex As Exception
-                MessageBox.Show("Error while writing, " & ex.ToString)
-            End Try
-
-            w.Flush()
-            w.Close()
-
-        End Using
-
+        Try
+            My.Computer.FileSystem.WriteAllText(filename, wholeFile, False)
+        Catch ex As Exception
+            MessageBox.Show("Error while writing, " & ex.ToString)
+        End Try
     End Sub
 
     Private Function MakeIncludesString() As String
