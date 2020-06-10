@@ -1,4 +1,7 @@
 ﻿Imports System.Collections
+Imports System.Collections.ObjectModel
+Imports System.IO
+
 Public Class Form1
     Private Class FilesInFolder
         Public filename As String
@@ -15,7 +18,7 @@ Public Class Form1
         txtSDKFolder.Text = My.Settings.SDKFolder
         txtProjectFolder.Text = My.Settings.SESProjectFolder
         txtProjectFile.Text = My.Settings.SESProjectFile
-
+        AutoFormatPaths()
     End Sub
 
     Private Sub btnReadProject_Click(sender As Object, e As EventArgs) Handles btnReadProject.Click
@@ -449,4 +452,94 @@ Public Class Form1
         End If
 
     End Sub
+
+    Private Sub mnuAutoFormatPaths_Click(sender As Object, e As EventArgs) Handles mnuAutoFormatPaths.Click
+        AutoFormatPaths()
+    End Sub
+
+    Private Sub AutoFormatPaths()
+        'takes a few seconds to get all subdirectories
+        'Dim dirs As ReadOnlyCollection(Of String) = My.Computer.FileSystem.GetDirectories(txtSDKFolder.Text, FileIO.SearchOption.SearchAllSubDirectories)
+        Dim dirs As ReadOnlyCollection(Of String) = My.Computer.FileSystem.GetDirectories(txtSDKFolder.Text, FileIO.SearchOption.SearchTopLevelOnly)
+
+
+        'Debug.Print(dirs.ToString)
+
+        'Dim pathInc As String = IO.Path.Combine(txtProjectFolder.Text, "../../config") 'abs path
+        '>Dim p1e As String = pathInc.TrimStart({"."c, "/"c})
+
+        Dim pathInc As String = "c:\1\2\3\config"
+        Dim pathProj As String = "c:\1\2\3\4\project"
+
+        Dim isProjectInsiderSDK As Boolean = pathInc.Contains(txtSDKFolder.Text)
+
+        'remove dirs until base is common with include file
+
+        'Dim i As Integer = pathInc.IndexOf(txtSDKFolder.Text)
+
+        Dim pathIncStrs() As String = pathInc.Split(Path.DirectorySeparatorChar) 'copy that will be chopped up
+        Dim pathProjStrs() As String = pathProj.Split(Path.DirectorySeparatorChar)
+
+        'make up string of n pa
+
+        'Debug.Print(AssembleStringN(pathIncStrs, "\", 2))
+
+        Dim relpath As String = ""
+
+        For n As Integer = pathProjStrs.Length To 1 Step -1
+            Dim commonPath As String = AssembleStringN(pathProjStrs, "\", n)
+            Debug.Print(commonPath)
+            If pathInc.Contains(commonPath) Then
+                relpath &= pathInc.Replace(commonPath, "")
+                Exit For
+            End If
+            relpath &= "..\"
+            Debug.Print(relpath)
+        Next n
+
+        Debug.Print(relpath)
+
+        'Dim p3() As String = pathInc.Split(txtSDKFolder.Text)
+
+        'If p3.Count > 0 Then
+        '    'project is inside sdk, can use rel path
+        '    Dim p2() As String = p3(1).Split(Path.PathSeparator)
+        '    Dim relpath As String = ""
+        '    For i As Integer = 0 To p2.Length - 1
+
+        '        relpath &= "../"
+        '    Next i
+        '    '   relpath &= p1e
+
+        'Else
+        '    'project is outside sdk, so have to use abs path
+        'End If
+
+        'For Each s As String In dirs
+        '    If s.EndsWith(p1e) Then
+        '        'convert s to relative form
+        '        ' Debug.Print(Path.
+        '    End If
+        'Next s
+
+        Stop
+    End Sub
+
+    ''' <summary>
+    ''' Assembles a string from an array and a seperator character up to n sections
+    ''' </summary>
+    ''' <param name="s">Array of sections</param>
+    ''' <param name="sep">Seperator Character</param>
+    ''' <param name="n">Number of sections you want</param>
+    ''' <returns>Assembled string</returns>
+    Public Function AssembleStringN(s() As String, sep As String, n As Integer) As String
+        If n > s.Length Then Return ""
+
+        Dim r As String = ""
+
+        For i As Integer = 1 To n
+            r &= s(i - 1) & sep
+        Next i
+        Return r.Remove(r.Length - 1) 'remove the final separator
+    End Function
 End Class
