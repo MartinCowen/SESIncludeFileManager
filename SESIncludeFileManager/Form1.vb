@@ -18,7 +18,9 @@ Public Class Form1
         txtSDKFolder.Text = My.Settings.SDKFolder
         txtProjectFolder.Text = My.Settings.SESProjectFolder
         txtProjectFile.Text = My.Settings.SESProjectFile
-        AutoFormatPaths()
+        Debug.Print(CombinePathWithRelative("\1\2\3", "..\5"))
+        Stop
+
     End Sub
 
     Private Sub btnReadProject_Click(sender As Object, e As EventArgs) Handles btnReadProject.Click
@@ -100,7 +102,7 @@ Public Class Form1
     ''' <param name="p">additional path</param>
     ''' <returns></returns>
     Private Function DoesDirectoryExist(p As String) As Boolean
-        Return My.Computer.FileSystem.DirectoryExists(My.Computer.FileSystem.CombinePath(txtProjectFolder.Text, p))
+        Return My.Computer.FileSystem.DirectoryExists(Path.GetFullPath(Path.Combine(txtProjectFolder.Text, p)))
     End Function
 
 
@@ -454,76 +456,90 @@ Public Class Form1
     End Sub
 
     Private Sub mnuAutoFormatPaths_Click(sender As Object, e As EventArgs) Handles mnuAutoFormatPaths.Click
-        AutoFormatPaths()
+        Me.Cursor = Cursors.WaitCursor
+        AutoFormatPaths(lvPaths.Items)
+        Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub AutoFormatPaths()
+    Private Sub AutoFormatPaths(ByRef ar As ListView.ListViewItemCollection)
         'takes a few seconds to get all subdirectories
         'Dim dirs As ReadOnlyCollection(Of String) = My.Computer.FileSystem.GetDirectories(txtSDKFolder.Text, FileIO.SearchOption.SearchAllSubDirectories)
         Dim dirs As ReadOnlyCollection(Of String) = My.Computer.FileSystem.GetDirectories(txtSDKFolder.Text, FileIO.SearchOption.SearchTopLevelOnly)
 
-
         'Debug.Print(dirs.ToString)
 
-        'Dim pathInc As String = IO.Path.Combine(txtProjectFolder.Text, "../../config") 'abs path
-        '>Dim p1e As String = pathInc.TrimStart({"."c, "/"c})
+        For i As Integer = 0 To ar.Count - 1
 
-        Dim pathInc As String = "c:\1\2\3\config"
-        Dim pathProj As String = "c:\1\2\3\4\project"
+            Dim pathInc As String = Path.GetFullPath(Path.Combine(txtProjectFolder.Text, ar(i).Text.Replace("/", "\"))) 'abs path
+            Dim pathProj As String = txtProjectFolder.Text 'abs path
 
-        Dim isProjectInsiderSDK As Boolean = pathInc.Contains(txtSDKFolder.Text)
+            Dim isProjectInsiderSDK As Boolean = pathInc.Contains(txtSDKFolder.Text)
+
+            If isProjectInsiderSDK Then
+                'project is inside sdk, can use rel path
+                Dim relpath As String = GetRelativePath(pathProj, pathInc)
+
+                If relpath <> String.Empty Then
+                    'write back the corrected version
+                    ar(i).Text = relpath.Replace("\", "/")
+                End If
+
+
+            Else
+                'project is outside sdk, so have to use abs path
+
+            End If
+
+
+        Next i
+
+
+    End Sub
+    Private Function GetRelativePath(pathAbsProj As String, pathAbsWithRel As String) As String
+        Dim relpath As String = ""
+        Dim pathIncStrs() As String = pathAbsWithRel.Split(Path.DirectorySeparatorChar) 'copy that will be chopped up
+        Dim pathProjStrs() As String = pathAbsProj.Split(Path.DirectorySeparatorChar)
 
         'remove dirs until base is common with include file
-
-        'Dim i As Integer = pathInc.IndexOf(txtSDKFolder.Text)
-
-        Dim pathIncStrs() As String = pathInc.Split(Path.DirectorySeparatorChar) 'copy that will be chopped up
-        Dim pathProjStrs() As String = pathProj.Split(Path.DirectorySeparatorChar)
-
-        'make up string of n pa
-
-        'Debug.Print(AssembleStringN(pathIncStrs, "\", 2))
-
-        Dim relpath As String = ""
-
         For n As Integer = pathProjStrs.Length To 1 Step -1
             Dim commonPath As String = AssembleStringN(pathProjStrs, "\", n)
             Debug.Print(commonPath)
-            If pathInc.Contains(commonPath) Then
-                relpath &= pathInc.Replace(commonPath, "")
+            If pathAbsWithRel.Contains(commonPath) Then
+                relpath &= pathAbsWithRel.Replace(commonPath & "\", "")
                 Exit For
             End If
             relpath &= "..\"
-            Debug.Print(relpath)
+            'Debug.Print(relpath)
         Next n
 
-        Debug.Print(relpath)
+        'Debug.Print(relpath)
+        Return relpath
 
-        'Dim p3() As String = pathInc.Split(txtSDKFolder.Text)
+    End Function
+    ''' <summary>
+    ''' Combines paths when relPath can start with "..\" or "." or "\"
+    ''' Does not cope with mixture of "..\" and "." in relPath
+    ''' </summary>
+    ''' <param name="basePath">Base Path</param>
+    ''' <param name="relPath">Relative Path</param>
+    ''' <returns>Combined Path</returns>
+    Private Function CombinePathWithRelative(basePath As String, relPath As String) As String
+        If relPath.StartsWith("..\") Then
+            'make copies to work with
+            Dim bp As String = basePath
+            Dim rp As String = relPath
+            Do
+                bp = bp.Substring(0, bp.LastIndexOf("\"))
+                rp = rp.Substring(rp.IndexOf("\") + 1)
+            Loop While rp.StartsWith("..\") And bp IsNot String.Empty
+            Return Path.Combine(bp, rp)
+        ElseIf relPath.StartsWith(".") Then
+            Return Path.Combine(Path.GetPathRoot(basePath), relPath.Substring(1))
+        Else
+            Return Path.Combine(basePath, relPath)
+        End If
 
-        'If p3.Count > 0 Then
-        '    'project is inside sdk, can use rel path
-        '    Dim p2() As String = p3(1).Split(Path.PathSeparator)
-        '    Dim relpath As String = ""
-        '    For i As Integer = 0 To p2.Length - 1
-
-        '        relpath &= "../"
-        '    Next i
-        '    '   relpath &= p1e
-
-        'Else
-        '    'project is outside sdk, so have to use abs path
-        'End If
-
-        'For Each s As String In dirs
-        '    If s.EndsWith(p1e) Then
-        '        'convert s to relative form
-        '        ' Debug.Print(Path.
-        '    End If
-        'Next s
-
-        Stop
-    End Sub
+    End Function
 
     ''' <summary>
     ''' Assembles a string from an array and a seperator character up to n sections
@@ -532,7 +548,7 @@ Public Class Form1
     ''' <param name="sep">Seperator Character</param>
     ''' <param name="n">Number of sections you want</param>
     ''' <returns>Assembled string</returns>
-    Public Function AssembleStringN(s() As String, sep As String, n As Integer) As String
+    Private Function AssembleStringN(s() As String, sep As String, n As Integer) As String
         If n > s.Length Then Return ""
 
         Dim r As String = ""
