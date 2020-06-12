@@ -28,7 +28,6 @@ Public Class Form1
 
     Private Sub ReadAndParseProjectFile(filename As String)
 
-
         Dim wholeFile As String = ""
 
         Try
@@ -392,19 +391,22 @@ Public Class Form1
     End Sub
 
     Private Sub mnuRemoveFolder_Click(sender As Object, e As EventArgs) Handles mnuRemoveFolder.Click
-        Dim lvi As ListViewItem
-        If lvPaths.SelectedItems.Count <> 1 Then Exit Sub 'must be exactly one item selected
-        lvi = lvPaths.SelectedItems(0)
+        Me.Cursor = Cursors.WaitCursor
+        lvPaths.BeginUpdate()
 
-        If lvi IsNot Nothing Then
-            If DeleteFolder(lvi.Text) Then
-                UpdatePathList(FiF_FoldersToArray(lstFilesInFolders))
-            Else
-                lvPaths.Items.Remove(lvi)
-                RefreshCountFolders()
-                RefreshlbFiles()
+        For Each lvi As ListViewItem In lvPaths.Items
+            If lvi IsNot Nothing AndAlso lvi.Selected Then
+                If DeleteFolder(lvi.Text) Then
+                    UpdatePathList(FiF_FoldersToArray(lstFilesInFolders))
+                Else
+                    lvPaths.Items.Remove(lvi)
+                    RefreshCountFolders()
+                    RefreshlbFiles()
+                End If
             End If
-        End If
+        Next lvi
+        lvPaths.EndUpdate()
+        Me.Cursor = Cursors.Default
     End Sub
 
     Private Function DeleteFolder(s As String) As Boolean
@@ -453,9 +455,9 @@ Public Class Form1
 
     Private Sub mnuAutoFormatPaths_Click(sender As Object, e As EventArgs) Handles mnuAutoFormatPaths.Click
         Me.Cursor = Cursors.WaitCursor
-        Dim lst As Array
-        lst = AutoFormatPaths(lvPaths)
-        UpdatePathList(lst)
+        Dim ar As Array
+        ar = AutoFormatPaths(lvPaths)
+        UpdatePathList(ar)
         Me.Cursor = Cursors.Default
     End Sub
 
@@ -514,16 +516,8 @@ Public Class Form1
                 Else 'didn't find it, so dont add to replacement list
                 End If
 
-            Else 'else inc path is abs, so find in sdk nominated
+            Else 'else inc path is abs so don't touch it
 
-                'Dim isProjectInsideSDK As Boolean = pathInc.Contains(txtSDKFolder.Text)
-
-                'If isProjectInsideSDK Then
-                '    'project is inside sdk, can use rel path
-                '    Dim relpath As String = GetRelativePath(pathProj, pathInc)
-                'Else
-                '    'project is outside sdk, so have to use abs path
-                'End If
             End If
 
         Next i
@@ -613,5 +607,26 @@ Public Class Form1
             r &= s(i - 1) & sep
         Next i
         Return r.Remove(r.Length - 1) 'remove the final separator
+    End Function
+
+    Private Sub ToAbsolutePathsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ToAbsolutePathsToolStripMenuItem.Click
+        Me.Cursor = Cursors.WaitCursor
+        Dim ar As Array
+        ar = PathsToAbsolute(lvPaths)
+        UpdatePathList(ar)
+        Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Function PathsToAbsolute(lv As ListView) As Array
+        Dim updatedItems As New ArrayList
+        For Each lvi As ListViewItem In lv.Items
+            If lvi.Selected Then
+                Dim abspath As String = CombinePathWithRelative(txtProjectFolder.Text, lvi.Text.Replace("/", "\"))
+                updatedItems.Add(abspath)
+            Else
+                updatedItems.Add(lvi.Text)
+            End If
+        Next lvi
+        Return updatedItems.ToArray
     End Function
 End Class

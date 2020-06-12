@@ -47,6 +47,7 @@ Partial Class Form1
         Me.mnuRemoveFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuRemoveAllNotFoundFolders = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuAutoFormatPaths = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToAbsolutePathsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmsPathPopup.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -225,9 +226,9 @@ Partial Class Form1
         '
         'cmsPathPopup
         '
-        Me.cmsPathPopup.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuRemoveFolder, Me.mnuRemoveAllNotFoundFolders, Me.mnuAutoFormatPaths})
+        Me.cmsPathPopup.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuRemoveFolder, Me.mnuRemoveAllNotFoundFolders, Me.mnuAutoFormatPaths, Me.ToAbsolutePathsToolStripMenuItem})
         Me.cmsPathPopup.Name = "cmsPathPopup"
-        Me.cmsPathPopup.Size = New System.Drawing.Size(236, 92)
+        Me.cmsPathPopup.Size = New System.Drawing.Size(236, 114)
         '
         'mnuRemoveFolder
         '
@@ -245,7 +246,13 @@ Partial Class Form1
         '
         Me.mnuAutoFormatPaths.Name = "mnuAutoFormatPaths"
         Me.mnuAutoFormatPaths.Size = New System.Drawing.Size(235, 22)
-        Me.mnuAutoFormatPaths.Text = "Auto Format Paths"
+        Me.mnuAutoFormatPaths.Text = "Auto Format Relative Paths"
+        '
+        'ToAbsolutePathsToolStripMenuItem
+        '
+        Me.ToAbsolutePathsToolStripMenuItem.Name = "ToAbsolutePathsToolStripMenuItem"
+        Me.ToAbsolutePathsToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.ToAbsolutePathsToolStripMenuItem.Text = "To Absolute Paths"
         '
         'Form1
         '
@@ -302,4 +309,5 @@ Partial Class Form1
     Friend WithEvents mnuRemoveFolder As ToolStripMenuItem
     Friend WithEvents mnuRemoveAllNotFoundFolders As ToolStripMenuItem
     Friend WithEvents mnuAutoFormatPaths As ToolStripMenuItem
+    Friend WithEvents ToAbsolutePathsToolStripMenuItem As ToolStripMenuItem
 End Class
