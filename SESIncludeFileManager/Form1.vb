@@ -472,6 +472,7 @@ Public Class Form1
         'Dim dirs As ReadOnlyCollection(Of String) = My.Computer.FileSystem.GetDirectories(txtSDKFolder.Text, FileIO.SearchOption.SearchTopLevelOnly)
 
         Dim updatedItems As New ArrayList
+        Dim unhandledPaths As New ArrayList
 
         'special case of the config folder. There is always one for each project, and the one you want to use is nearest to the project file
         Dim projConfigAbsPath As String = FindNearestFolderPath("config", txtProjectFolder.Text)
@@ -491,6 +492,7 @@ Public Class Form1
                     relPathInc = relPathInc.Replace(txtSDKFolder.Text & "\", "")
                 Else
                     'skip this one, nothing can be done. must be a different sdk so no way to automatically know where to split this between sdk path and includes
+                    unhandledPaths.Add(relPathInc)
                     Continue For
                 End If
             End If
@@ -527,6 +529,14 @@ Public Class Form1
             End If
 
         Next i
+
+        If unhandledPaths.Count > 0 Then
+            Dim uhpLines As String = System.Environment.NewLine 'put one newline at start to seperate from message
+            For Each s As String In unhandledPaths
+                uhpLines &= s & System.Environment.NewLine
+            Next s
+            MessageBox.Show("The following paths could not be converted!" & uhpLines)
+        End If
 
         Return updatedItems.ToArray
 
