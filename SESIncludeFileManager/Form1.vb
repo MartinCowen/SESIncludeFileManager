@@ -106,8 +106,6 @@ Public Class Form1
         Return My.Computer.FileSystem.DirectoryExists(Path.GetFullPath(Path.Combine(txtProjectFolder.Text, p)))
     End Function
 
-
-
     Private Sub lvPaths_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lvPaths.SelectedIndexChanged
 
         If lvPaths.SelectedItems.Count < 1 Then Exit Sub
@@ -167,8 +165,6 @@ Public Class Form1
         lblCountFolders.Text = "Total: " & lvPaths.Items.Count.ToString & " Not Found: " & notfoundcount.ToString
     End Sub
 
-
-
     Private Function GetListOfFilesInFolder(folder As String) As List(Of String)
         Dim res As Array = Nothing
         Dim lstFiles As New List(Of String)
@@ -219,7 +215,6 @@ Public Class Form1
         Next n
         Return lstFiles
     End Function
-
 
     Private Sub lstFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbFiles.SelectedIndexChanged
         If chkOnlyShowFilesInSelectedFolder.Checked = False Then
@@ -331,11 +326,14 @@ Public Class Form1
     End Function
 
     Private Function FiF_FoldersToArray(lFiF As List(Of FilesInFolder)) As Array
-        Dim ar(lFiF.Count) As String
+
+        Dim ar As New ArrayList
         For i As Integer = 0 To lFiF.Count - 1
-            ar(i) = lFiF.Item(i).folder
+            If Not ar.Contains(lFiF.Item(i).folder) Then
+                ar.Add(lFiF.Item(i).folder)
+            End If
         Next i
-        Return ar
+        Return ar.ToArray
     End Function
 
     Private Sub btnUpdateProject_Click(sender As Object, e As EventArgs) Handles btnUpdateProject.Click
@@ -367,9 +365,6 @@ Public Class Form1
         'write to file
 
         Dim wholeFile As String = ""
-        'For Each lineStr As String In projFileLines
-        '    wholeFile &= lineStr & lineEndingChar
-        'Next lineStr
 
         For i As Integer = 0 To projFileLines.Count - 2 'eliminate final blank line
             wholeFile &= projFileLines(i) & lineEndingChar
@@ -403,7 +398,7 @@ Public Class Form1
 
         If lvi IsNot Nothing Then
             If DeleteFolder(lvi.Text) Then
-                UpdatePathList(FiF_FoldersToArray(lstFilesInFolders)) 'problem for folders with no files!
+                UpdatePathList(FiF_FoldersToArray(lstFilesInFolders))
             Else
                 lvPaths.Items.Remove(lvi)
                 RefreshCountFolders()
