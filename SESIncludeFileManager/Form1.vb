@@ -485,39 +485,45 @@ Public Class Form1
             Dim pathInc As String = Path.GetFullPath(Path.Combine(txtProjectFolder.Text, ar(i).Text.Replace("/", "\"))) 'abs path
             Dim pathProj As String = txtProjectFolder.Text 'abs path
 
-            'if inc path is rel ie contains ..\ then find in tree above project
-            If relPathInc.Contains("..\") Then
-                'strip off all ..\ to extract the last part but include a final backslash so that we are looking for a folder
-                Dim incPathEnds As String = "\" & relPathInc.Replace("..\", "") 'eg \components\ble\ble_advertising
 
-                'search dirs for incPathEnds
-                Dim isDirFound As Boolean = False
-                Dim foundDirAbs As String = ""
-                For Each dirStr As String In dirs
-                    If dirStr.Contains(incPathEnds) Then
-                        isDirFound = True
-                        foundDirAbs = dirStr
-                        Exit For
-                    End If
-                Next dirStr
-
-                If isDirFound Then
-                    'convert foundDirAbs to relative for this location
-                    Dim updatedRelPath As String = GetRelativePath(pathProj, foundDirAbs)
-                    updatedRelPath = updatedRelPath.Replace("\", "/") 'restore the forward slashes
-
-                    'don't duplicate an existing item and check that it contains at least one file
-                    If updatedRelPath <> String.Empty AndAlso Not updatedItems.Contains(updatedRelPath) Then
-                        Dim updatedAbsPath As String = CombinePathWithRelative(pathProj, updatedRelPath.Replace("/", "\"))
-                        If My.Computer.FileSystem.DirectoryExists(updatedAbsPath) AndAlso My.Computer.FileSystem.GetFiles(updatedAbsPath).Count > 0 Then
-                            updatedItems.Add(updatedRelPath)
-                        End If
-                    End If
-                Else 'didn't find it, so dont add to replacement list
+            If Not relPathInc.Contains("..\") Then 'abs path so starts with sdk folder, remove that leaving eg "\components\ble"
+                If relPathInc.StartsWith(txtSDKFolder.Text) Then
+                    relPathInc = relPathInc.Replace(txtSDKFolder.Text & "\", "")
+                Else
+                    'skip this one, nothing can be done. must be a different sdk so no way to automatically know where to split this between sdk path and includes
+                    Continue For
                 End If
+            End If
 
-            Else 'else inc path is abs so don't touch it
+            'inc path is relative at this point, ie can contain ..\ or just \ then find in tree above project
 
+            'strip off all ..\ to extract the last part but include a final backslash so that we are looking for a folder
+            Dim incPathEnds As String = "\" & relPathInc.Replace("..\", "") 'eg \components\ble\ble_advertising
+
+            'search dirs for incPathEnds
+            Dim isDirFound As Boolean = False
+            Dim foundDirAbs As String = ""
+            For Each dirStr As String In dirs
+                If dirStr.Contains(incPathEnds) Then
+                    isDirFound = True
+                    foundDirAbs = dirStr
+                    Exit For
+                End If
+            Next dirStr
+
+            If isDirFound Then
+                'convert foundDirAbs to relative for this location
+                Dim updatedRelPath As String = GetRelativePath(pathProj, foundDirAbs)
+                updatedRelPath = updatedRelPath.Replace("\", "/") 'restore the forward slashes
+
+                'don't duplicate an existing item and check that it contains at least one file
+                If updatedRelPath <> String.Empty AndAlso Not updatedItems.Contains(updatedRelPath) Then
+                    Dim updatedAbsPath As String = CombinePathWithRelative(pathProj, updatedRelPath.Replace("/", "\"))
+                    If My.Computer.FileSystem.DirectoryExists(updatedAbsPath) AndAlso My.Computer.FileSystem.GetFiles(updatedAbsPath).Count > 0 Then
+                        updatedItems.Add(updatedRelPath)
+                    End If
+                End If
+            Else 'didn't find it, so dont add to replacement list
             End If
 
         Next i
