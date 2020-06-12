@@ -18,8 +18,6 @@ Public Class Form1
         txtSDKFolder.Text = My.Settings.SDKFolder
         txtProjectFolder.Text = My.Settings.SESProjectFolder
         txtProjectFile.Text = My.Settings.SESProjectFile
-        Debug.Print(CombinePathWithRelative("\1\2\3", "..\5"))
-        Stop
 
     End Sub
 
@@ -81,13 +79,16 @@ Public Class Form1
 
             lvi.Text = p
 
-            If Not DoesDirectoryExist(p) Then
-                lvi.SubItems.Add(NotFoundMarker)
-            Else
-                lvi.SubItems.Add("")
-            End If
+            If p IsNot Nothing Then
 
-            lvPaths.Items.Add(lvi)
+                If Not DoesDirectoryExist(p) Then
+                    lvi.SubItems.Add(NotFoundMarker)
+                Else
+                    lvi.SubItems.Add("")
+                End If
+
+                lvPaths.Items.Add(lvi)
+            End If
         Next p
 
         lvPaths.EndUpdate()
@@ -457,44 +458,108 @@ Public Class Form1
 
     Private Sub mnuAutoFormatPaths_Click(sender As Object, e As EventArgs) Handles mnuAutoFormatPaths.Click
         Me.Cursor = Cursors.WaitCursor
-        AutoFormatPaths(lvPaths.Items)
+        Dim lst As Array
+        lst = AutoFormatPaths(lvPaths)
+        UpdatePathList(lst)
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub AutoFormatPaths(ByRef ar As ListView.ListViewItemCollection)
-        'takes a few seconds to get all subdirectories
-        'Dim dirs As ReadOnlyCollection(Of String) = My.Computer.FileSystem.GetDirectories(txtSDKFolder.Text, FileIO.SearchOption.SearchAllSubDirectories)
-        Dim dirs As ReadOnlyCollection(Of String) = My.Computer.FileSystem.GetDirectories(txtSDKFolder.Text, FileIO.SearchOption.SearchTopLevelOnly)
+    Private Function AutoFormatPaths(ByRef lvParent As ListView) As Array
 
-        'Debug.Print(dirs.ToString)
+        Dim ar As ListView.ListViewItemCollection = lvParent.Items
+
+        'takes a few seconds to get all subdirectories
+        Dim dirs As ReadOnlyCollection(Of String) = My.Computer.FileSystem.GetDirectories(txtSDKFolder.Text, FileIO.SearchOption.SearchAllSubDirectories)
+
+        'quick version for testing but only for some files
+        'Dim dirs As ReadOnlyCollection(Of String) = My.Computer.FileSystem.GetDirectories(txtSDKFolder.Text, FileIO.SearchOption.SearchTopLevelOnly)
+
+        Dim updatedItems As New ArrayList
+
+        'special case of the config folder. There is always one for each project, and the one you want to use is nearest to the project file
+        Dim projConfigAbsPath As String = FindNearestFolderPath("config", txtProjectFolder.Text)
+        Dim projConfigRelPath As String = GetRelativePath(txtProjectFile.Text, projConfigAbsPath) & "config"
+
+        updatedItems.Add(projConfigRelPath.Replace("\", "/"))
 
         For i As Integer = 0 To ar.Count - 1
 
+            Dim relPathInc As String = ar(i).Text.Replace("/", "\") 'normalise the slashes to backwards for ease of testing
             Dim pathInc As String = Path.GetFullPath(Path.Combine(txtProjectFolder.Text, ar(i).Text.Replace("/", "\"))) 'abs path
             Dim pathProj As String = txtProjectFolder.Text 'abs path
 
-            Dim isProjectInsiderSDK As Boolean = pathInc.Contains(txtSDKFolder.Text)
+            'if inc path is rel ie contains ..\ then find in tree above project
+            If relPathInc.Contains("..\") Then
+                'strip off all ..\ to extract the last part but include a final backslash so that we are looking for a folder
+                Dim incPathEnds As String = "\" & relPathInc.Replace("..\", "") 'eg \components\ble\ble_advertising
 
-            If isProjectInsiderSDK Then
-                'project is inside sdk, can use rel path
-                Dim relpath As String = GetRelativePath(pathProj, pathInc)
+                'search dirs for incPathEnds
+                Dim isDirFound As Boolean = False
+                Dim foundDirAbs As String = ""
+                For Each dirStr As String In dirs
+                    If dirStr.Contains(incPathEnds) Then
+                        isDirFound = True
+                        foundDirAbs = dirStr
+                        Exit For
+                    End If
+                Next dirStr
 
-                If relpath <> String.Empty Then
-                    'write back the corrected version
-                    ar(i).Text = relpath.Replace("\", "/")
+                If isDirFound Then
+                    'convert foundDirAbs to relative for this location
+                    Dim updatedRelPath As String = GetRelativePath(pathProj, foundDirAbs)
+                    updatedRelPath = updatedRelPath.Replace("\", "/") 'restore the forward slashes
+
+                    'don't duplicate an existing item and check that it contains at least one file
+                    If updatedRelPath <> String.Empty AndAlso Not updatedItems.Contains(updatedRelPath) Then
+                        Dim updatedAbsPath As String = CombinePathWithRelative(pathProj, updatedRelPath.Replace("/", "\"))
+                        If My.Computer.FileSystem.DirectoryExists(updatedAbsPath) AndAlso My.Computer.FileSystem.GetFiles(updatedAbsPath).Count > 0 Then
+                            updatedItems.Add(updatedRelPath)
+                        End If
+                    End If
+                Else 'didn't find it, so dont add to replacement list
                 End If
 
+            Else 'else inc path is abs, so find in sdk nominated
 
-            Else
-                'project is outside sdk, so have to use abs path
+                'Dim isProjectInsideSDK As Boolean = pathInc.Contains(txtSDKFolder.Text)
 
+                'If isProjectInsideSDK Then
+                '    'project is inside sdk, can use rel path
+                '    Dim relpath As String = GetRelativePath(pathProj, pathInc)
+                'Else
+                '    'project is outside sdk, so have to use abs path
+                'End If
             End If
-
 
         Next i
 
+        Return updatedItems.ToArray
 
-    End Sub
+    End Function
+    ''' <summary>
+    ''' Works up the folder hierarchy until it finds folder
+    ''' </summary>
+    ''' <param name="folder">folder to find</param>
+    ''' <param name="startFolder">starting folder</param>
+    ''' <returns>Absolute path to folder</returns>
+    Private Function FindNearestFolderPath(folder As String, startFolder As String) As String
+        Dim f As String = startFolder 'take a copy
+        Dim subs As ReadOnlyCollection(Of String)
+        Do
+            f = f.Substring(0, f.LastIndexOf("\"))
+            subs = My.Computer.FileSystem.GetDirectories(f, FileIO.SearchOption.SearchAllSubDirectories)
+        Loop While subs.Where(Function(s) s.Contains(folder)).Count = 0
+
+        'assume only 1 matching folder with this name
+        Return subs.Where(Function(s) s.Contains(folder))(0).ToString
+    End Function
+
+    ''' <summary>
+    ''' Gets the relative path to pathAbsWithRel folder from pathAbsProj folder
+    ''' </summary>
+    ''' <param name="pathAbsProj">Starting folder</param>
+    ''' <param name="pathAbsWithRel">Folder to get to</param>
+    ''' <returns>Relative path</returns>
     Private Function GetRelativePath(pathAbsProj As String, pathAbsWithRel As String) As String
         Dim relpath As String = ""
         Dim pathIncStrs() As String = pathAbsWithRel.Split(Path.DirectorySeparatorChar) 'copy that will be chopped up
@@ -503,16 +568,13 @@ Public Class Form1
         'remove dirs until base is common with include file
         For n As Integer = pathProjStrs.Length To 1 Step -1
             Dim commonPath As String = AssembleStringN(pathProjStrs, "\", n)
-            Debug.Print(commonPath)
             If pathAbsWithRel.Contains(commonPath) Then
                 relpath &= pathAbsWithRel.Replace(commonPath & "\", "")
                 Exit For
             End If
             relpath &= "..\"
-            'Debug.Print(relpath)
         Next n
 
-        'Debug.Print(relpath)
         Return relpath
 
     End Function
@@ -540,7 +602,6 @@ Public Class Form1
         End If
 
     End Function
-
     ''' <summary>
     ''' Assembles a string from an array and a seperator character up to n sections
     ''' </summary>
