@@ -113,7 +113,7 @@ Public Class Form1
     Private Sub lvPaths_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lvPaths.SelectedIndexChanged
 
         If lvPaths.SelectedItems.Count < 1 Then Exit Sub
-        If Not bManualSelectFile Then
+        If Not bManualSelectFile AndAlso chkOnlyShowFilesInSelectedFolder.Checked Then
             RefreshlbFiles()
         End If
     End Sub
