@@ -11,6 +11,7 @@ Public Class Form1
     Private lstFilesInFolders As New List(Of FilesInFolder)
     Private bManualSelectFile As Boolean
     Private Const NotFoundMarker As String = "!"
+    Private Const StudioDirToken As String = "$(StudioDir)"
     Private projFileLines() As String 'untrimmed, just each of the orignal lines in an array
     Private lineEndingChar As String = System.Environment.NewLine 'detect on read, use later on write back to file
 
@@ -102,6 +103,10 @@ Public Class Form1
     ''' <param name="p">additional path</param>
     ''' <returns></returns>
     Private Function DoesDirectoryExist(p As String) As Boolean
+        If p.StartsWith(StudioDirToken) Then
+            p = p.Replace(StudioDirToken, txtSDKFolder.Text)
+            Return My.Computer.FileSystem.DirectoryExists(p)
+        End If
         Return My.Computer.FileSystem.DirectoryExists(Path.GetFullPath(Path.Combine(txtProjectFolder.Text, p)))
     End Function
 
@@ -168,7 +173,15 @@ Public Class Form1
         Dim res As Array = Nothing
         Dim lstFiles As New List(Of String)
         If DoesDirectoryExist(folder) Then
-            res = My.Computer.FileSystem.GetFiles(My.Computer.FileSystem.CombinePath(txtProjectFolder.Text, folder), FileIO.SearchOption.SearchTopLevelOnly, "*.h").ToArray
+            Dim p As String
+            If folder.StartsWith(StudioDirToken) Then
+                p = folder.Replace(StudioDirToken, txtSDKFolder.Text)
+            Else
+                p = My.Computer.FileSystem.CombinePath(txtProjectFolder.Text, folder)
+            End If
+
+            res = My.Computer.FileSystem.GetFiles(p, FileIO.SearchOption.SearchTopLevelOnly, "*.h").ToArray
+
             For Each n As String In res
                 lstFiles.Add(My.Computer.FileSystem.GetName(n))
             Next n
@@ -490,6 +503,8 @@ Public Class Form1
             If Not relPathInc.Contains("..\") Then 'abs path so starts with sdk folder, remove that leaving eg "\components\ble"
                 If relPathInc.StartsWith(txtSDKFolder.Text) Then
                     relPathInc = relPathInc.Replace(txtSDKFolder.Text & "\", "")
+                ElseIf relPathInc.StartsWith(StudioDirToken) Then
+                    relPathInc = relPathInc.Replace(StudioDirToken & "\", "")
                 Else
                     'skip this one, nothing can be done. must be a different sdk so no way to automatically know where to split this between sdk path and includes
                     unhandledPaths.Add(relPathInc)
@@ -625,7 +640,7 @@ Public Class Form1
         Return r.Remove(r.Length - 1) 'remove the final separator
     End Function
 
-    Private Sub ToAbsolutePathsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ToAbsolutePathsToolStripMenuItem.Click
+    Private Sub mnuToAbsolutePaths_Click(sender As Object, e As EventArgs) Handles mnuToAbsolutePaths.Click
         Me.Cursor = Cursors.WaitCursor
         Dim ar As Array
         ar = PathsToAbsolute(lvPaths)
@@ -639,6 +654,29 @@ Public Class Form1
             If lvi.Selected Then
                 Dim abspath As String = CombinePathWithRelative(txtProjectFolder.Text, lvi.Text.Replace("/", "\"))
                 updatedItems.Add(abspath)
+            Else
+                updatedItems.Add(lvi.Text)
+            End If
+        Next lvi
+        Return updatedItems.ToArray
+    End Function
+
+    Private Sub mnuToStudioDirPaths_Click(sender As Object, e As EventArgs) Handles mnuToStudioDirPaths.Click
+        Me.Cursor = Cursors.WaitCursor
+        Dim ar As Array
+        ar = PathsToStudioDir(lvPaths)
+        UpdatePathList(ar)
+        Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Function PathsToStudioDir(lv As ListView) As Array
+        Dim updatedItems As New ArrayList
+        For Each lvi As ListViewItem In lv.Items
+            If lvi.Selected Then
+                Dim studiodirpath As String = CombinePathWithRelative(txtProjectFolder.Text, lvi.Text.Replace("/", "\")) 'abs path at this point
+                studiodirpath = studiodirpath.Replace(txtSDKFolder.Text, StudioDirToken)
+                studiodirpath = studiodirpath.Replace("\", "/")
+                updatedItems.Add(studiodirpath)
             Else
                 updatedItems.Add(lvi.Text)
             End If
