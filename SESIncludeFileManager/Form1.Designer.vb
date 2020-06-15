@@ -71,7 +71,7 @@ Partial Class Form1
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 39)
+        Me.Label2.Location = New System.Drawing.Point(12, 42)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(96, 13)
         Me.Label2.TabIndex = 2
@@ -79,7 +79,7 @@ Partial Class Form1
         '
         'txtProjectFolder
         '
-        Me.txtProjectFolder.Location = New System.Drawing.Point(107, 36)
+        Me.txtProjectFolder.Location = New System.Drawing.Point(107, 39)
         Me.txtProjectFolder.Name = "txtProjectFolder"
         Me.txtProjectFolder.Size = New System.Drawing.Size(664, 20)
         Me.txtProjectFolder.TabIndex = 3
@@ -96,7 +96,7 @@ Partial Class Form1
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(16, 112)
+        Me.Label3.Location = New System.Drawing.Point(18, 127)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(72, 13)
         Me.Label3.TabIndex = 5
@@ -105,7 +105,7 @@ Partial Class Form1
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(339, 107)
+        Me.Label4.Location = New System.Drawing.Point(388, 108)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(66, 13)
         Me.Label4.TabIndex = 7
@@ -114,7 +114,7 @@ Partial Class Form1
         'lbFiles
         '
         Me.lbFiles.FormattingEnabled = True
-        Me.lbFiles.Location = New System.Drawing.Point(342, 149)
+        Me.lbFiles.Location = New System.Drawing.Point(391, 150)
         Me.lbFiles.Name = "lbFiles"
         Me.lbFiles.Size = New System.Drawing.Size(279, 316)
         Me.lbFiles.Sorted = True
@@ -122,7 +122,7 @@ Partial Class Form1
         '
         'txtSearchFiles
         '
-        Me.txtSearchFiles.Location = New System.Drawing.Point(342, 123)
+        Me.txtSearchFiles.Location = New System.Drawing.Point(391, 124)
         Me.txtSearchFiles.Name = "txtSearchFiles"
         Me.txtSearchFiles.Size = New System.Drawing.Size(279, 20)
         Me.txtSearchFiles.TabIndex = 9
@@ -155,7 +155,7 @@ Partial Class Form1
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(16, 74)
+        Me.Label5.Location = New System.Drawing.Point(18, 75)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(83, 13)
         Me.Label5.TabIndex = 13
@@ -168,7 +168,7 @@ Partial Class Form1
         Me.lvPaths.HideSelection = False
         Me.lvPaths.Location = New System.Drawing.Point(19, 149)
         Me.lvPaths.Name = "lvPaths"
-        Me.lvPaths.Size = New System.Drawing.Size(317, 316)
+        Me.lvPaths.Size = New System.Drawing.Size(366, 316)
         Me.lvPaths.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.lvPaths.TabIndex = 14
         Me.lvPaths.UseCompatibleStateImageBehavior = False
@@ -178,7 +178,7 @@ Partial Class Form1
         '
         Me.colPath.DisplayIndex = 1
         Me.colPath.Text = "Path"
-        Me.colPath.Width = 300
+        Me.colPath.Width = 334
         '
         'colFound
         '
@@ -189,7 +189,7 @@ Partial Class Form1
         'chkOnlyShowFilesInSelectedFolder
         '
         Me.chkOnlyShowFilesInSelectedFolder.AutoSize = True
-        Me.chkOnlyShowFilesInSelectedFolder.Location = New System.Drawing.Point(143, 123)
+        Me.chkOnlyShowFilesInSelectedFolder.Location = New System.Drawing.Point(146, 126)
         Me.chkOnlyShowFilesInSelectedFolder.Name = "chkOnlyShowFilesInSelectedFolder"
         Me.chkOnlyShowFilesInSelectedFolder.Size = New System.Drawing.Size(190, 17)
         Me.chkOnlyShowFilesInSelectedFolder.TabIndex = 15
@@ -219,7 +219,7 @@ Partial Class Form1
         '
         Me.lblCountFiles.AutoSize = True
         Me.lblCountFiles.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblCountFiles.Location = New System.Drawing.Point(342, 474)
+        Me.lblCountFiles.Location = New System.Drawing.Point(391, 475)
         Me.lblCountFiles.Name = "lblCountFiles"
         Me.lblCountFiles.Size = New System.Drawing.Size(45, 15)
         Me.lblCountFiles.TabIndex = 18
@@ -229,34 +229,39 @@ Partial Class Form1
         '
         Me.cmsPathPopup.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuRemoveFolder, Me.mnuRemoveAllNotFoundFolders, Me.mnuAutoFormatPaths, Me.mnuToAbsolutePaths, Me.mnuToStudioDirPaths})
         Me.cmsPathPopup.Name = "cmsPathPopup"
-        Me.cmsPathPopup.Size = New System.Drawing.Size(236, 136)
+        Me.cmsPathPopup.Size = New System.Drawing.Size(236, 114)
         '
         'mnuRemoveFolder
         '
+        Me.mnuRemoveFolder.Image = Global.SESIncludeFileManager.My.Resources.Resources.red_cross_icon
         Me.mnuRemoveFolder.Name = "mnuRemoveFolder"
         Me.mnuRemoveFolder.Size = New System.Drawing.Size(235, 22)
         Me.mnuRemoveFolder.Text = "Remove Folder"
         '
         'mnuRemoveAllNotFoundFolders
         '
+        Me.mnuRemoveAllNotFoundFolders.Image = Global.SESIncludeFileManager.My.Resources.Resources.broom_icon1
         Me.mnuRemoveAllNotFoundFolders.Name = "mnuRemoveAllNotFoundFolders"
         Me.mnuRemoveAllNotFoundFolders.Size = New System.Drawing.Size(235, 22)
         Me.mnuRemoveAllNotFoundFolders.Text = "Remove All Not Found Folders"
         '
         'mnuAutoFormatPaths
         '
+        Me.mnuAutoFormatPaths.Image = Global.SESIncludeFileManager.My.Resources.Resources.dot_dot_slash_white_bg_icon
         Me.mnuAutoFormatPaths.Name = "mnuAutoFormatPaths"
         Me.mnuAutoFormatPaths.Size = New System.Drawing.Size(235, 22)
         Me.mnuAutoFormatPaths.Text = "Auto Format Relative Paths"
         '
         'mnuToAbsolutePaths
         '
+        Me.mnuToAbsolutePaths.Image = Global.SESIncludeFileManager.My.Resources.Resources.c_colon_white_bg_icon
         Me.mnuToAbsolutePaths.Name = "mnuToAbsolutePaths"
         Me.mnuToAbsolutePaths.Size = New System.Drawing.Size(235, 22)
         Me.mnuToAbsolutePaths.Text = "To Absolute Paths"
         '
         'mnuToStudioDirPaths
         '
+        Me.mnuToStudioDirPaths.Image = Global.SESIncludeFileManager.My.Resources.Resources.dollar_icon
         Me.mnuToStudioDirPaths.Name = "mnuToStudioDirPaths"
         Me.mnuToStudioDirPaths.Size = New System.Drawing.Size(235, 22)
         Me.mnuToStudioDirPaths.Text = "To StudioDir Paths"
@@ -284,6 +289,8 @@ Partial Class Form1
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.txtSDKFolder)
         Me.Controls.Add(Me.Label1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
         Me.Name = "Form1"
         Me.Text = "SES Include File Manager"
         Me.cmsPathPopup.ResumeLayout(False)

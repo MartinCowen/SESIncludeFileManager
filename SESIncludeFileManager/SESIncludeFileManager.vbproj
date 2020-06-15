@@ -144,5 +144,38 @@
     </None>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\red cross icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\broom icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\c colon white bg icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\dot dot slash white bg icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\dollar icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\broom icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\c colon white bg icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\dollar icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\dot dot slash white bg icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\red cross icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
