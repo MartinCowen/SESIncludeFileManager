@@ -50,4 +50,4 @@ Some Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a>
 
  
 ## Installation
-The [executable](link) is a single file which runs on Windows 10 assuming the .NET Framework 4.7.2 is installed, so it does not need an installer.  
+The [executable](SESIncludeFileManager/bin/x86/Release/SESIncludeFileManager.exe) is a single file which runs on Windows 10 assuming the .NET Framework 4.7.2 is installed, so it does not need an installer.  
