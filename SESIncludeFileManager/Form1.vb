@@ -455,7 +455,6 @@ Public Class Form1
         Next i
         lvPaths.EndUpdate()
 
-        'TODO Test
         If found Then
             UpdatePathList(FiF_FoldersToArray(lstFilesInFolders)) 'problem for folders with no files!
         Else
