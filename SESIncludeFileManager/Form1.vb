@@ -4,7 +4,7 @@ Imports System.IO
 
 
 Public Class Form1
-    Private Class FilesInFolder
+    Friend Class FilesInFolder
         Public filename As String
         Public folder As String
     End Class
@@ -14,8 +14,16 @@ Public Class Form1
     Private Const NotFoundMarker As String = "!"
     Private projFileLines() As String 'untrimmed, just each of the orignal lines in an array
     Private lineEndingChar As String = System.Environment.NewLine 'detect on read, use later on write back to file
+    Friend SDKFolder As String
+    Friend FileAdded As String
+    Friend FolderAdded As String
+    Friend FileSearchFor As String
+
+
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        'retrieve settings and use them to populate the text boxes
         txtSDKFolder.Text = My.Settings.SDKFolder
         txtProjectFolder.Text = My.Settings.SESProjectFolder
         txtProjectFile.Text = My.Settings.SESProjectFile
@@ -34,7 +42,7 @@ Public Class Form1
         Try
             wholeFile = My.Computer.FileSystem.ReadAllText(filename)
         Catch ex As Exception
-            MessageBox.Show("error loading file " & filename & " - " & ex.ToString)
+            MessageBox.Show("Error loading file " & filename & " - " & ex.ToString)
         End Try
 
         'auto detect line ending
@@ -114,6 +122,7 @@ Public Class Form1
     End Sub
 
     Private Sub RefreshlbFiles()
+        'refreshes the listbox of files
 
         lbFiles.BeginUpdate()
         lbFiles.Items.Clear()
@@ -123,7 +132,7 @@ Public Class Form1
             'file list is cleared and only shows files from selected folder
             Dim d As String = lvPaths.SelectedItems(0).Text
 
-            For Each s As String In GetListOfFilesInFolder(d)
+            For Each s As String In GetListOfFilesInFolder(d, "*.h")
                 Dim fif As New FilesInFolder
                 fif.filename = s
                 fif.folder = d
@@ -137,7 +146,7 @@ Public Class Form1
             For Each lvi As ListViewItem In lvPaths.Items
                 Dim d As String = lvi.Text
                 If DoesDirectoryExist(d) Then
-                    For Each s As String In GetListOfFilesInFolder(d)
+                    For Each s As String In GetListOfFilesInFolder(d, "*.h")
                         Dim fif As New FilesInFolder
                         fif.filename = s
                         fif.folder = d
@@ -164,13 +173,19 @@ Public Class Form1
         lblCountFolders.Text = "Total: " & lvPaths.Items.Count.ToString & " Not Found: " & notfoundcount.ToString
     End Sub
 
-    Private Function GetListOfFilesInFolder(folder As String) As List(Of String)
+    ''' <summary>
+    ''' Gets list of files in folder, top level only, combines folder name with project folder
+    ''' </summary>
+    ''' <param name="folder">folder in project</param>
+    ''' <param name="filter">filter on filename eg "*.h"</param>
+    ''' <returns></returns>
+    Private Function GetListOfFilesInFolder(folder As String, filter As String) As List(Of String)
         Dim res As Array = Nothing
         Dim lstFiles As New List(Of String)
         If DoesDirectoryExist(folder) Then
             Dim p As String
             p = My.Computer.FileSystem.CombinePath(txtProjectFolder.Text, folder)
-            res = My.Computer.FileSystem.GetFiles(p, FileIO.SearchOption.SearchTopLevelOnly, "*.h").ToArray
+            res = My.Computer.FileSystem.GetFiles(p, FileIO.SearchOption.SearchTopLevelOnly, filter).ToArray
 
             For Each n As String In res
                 lstFiles.Add(My.Computer.FileSystem.GetName(n))
@@ -187,6 +202,7 @@ Public Class Form1
 
     Private Sub txtSearchFiles_TextChanged(sender As Object, e As EventArgs) Handles txtSearchFiles.TextChanged
         UpdateLbFiles()
+        btnAddIncludeFile.Enabled = (txtSearchFiles.Text <> "")
     End Sub
     Private Sub txtSearchFiles_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSearchFiles.KeyDown
         If e.KeyCode = Keys.Enter Then UpdateLbFiles()
@@ -204,6 +220,12 @@ Public Class Form1
 
     End Sub
 
+    ''' <summary>
+    ''' Finds all strings in lstOriginal that match string s
+    ''' </summary>
+    ''' <param name="s">String to search for</param>
+    ''' <param name="lstOriginal">List of strings to be searched</param>
+    ''' <returns>List of Strings that matched</returns>
     Private Function FindFileNamesMatchingString(s As String, lstOriginal As List(Of String)) As List(Of String)
         Dim lstFiles As New List(Of String)
 
@@ -237,9 +259,12 @@ Public Class Form1
             End If
         End If
     End Sub
+    ''' <summary>
+    ''' Reverse lookup, find the folder for this file
+    ''' </summary>
+    ''' <param name="f">filename</param>
+    ''' <returns>Foldername</returns>
     Private Function FindFolderForFile(f As String) As String
-
-        'reverse lookup, find the folder for this file
         For Each fif As FilesInFolder In lstFilesInFolders
             If fif.filename = f Then Return fif.folder
         Next fif
@@ -332,6 +357,11 @@ Public Class Form1
 
     End Sub
 
+    ''' <summary>
+    ''' Converts list of FilesInFolder to an array of just the Folder names
+    ''' </summary>
+    ''' <param name="lFiF"></param>
+    ''' <returns></returns>
     Private Function FiF_FoldersToArray(lFiF As List(Of FilesInFolder)) As Array
 
         Dim ar As New ArrayList
@@ -343,7 +373,7 @@ Public Class Form1
         Return ar.ToArray
     End Function
 
-    Private Sub btnUpdateProject_Click(sender As Object, e As EventArgs) Handles btnUpdateProject.Click
+    Private Sub btnUpdateProject_Click(sender As Object, e As EventArgs) Handles btnSaveProject.Click
         Dim resp As DialogResult = MessageBox.Show("Overwrite project file." & vbCrLf & "Are you sure?", "About to write back to project file", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
 
         If resp = DialogResult.Yes Then
@@ -657,4 +687,13 @@ Public Class Form1
         Return updatedItems.ToArray
     End Function
 
+    Private Sub btnAddIncludeFile_Click(sender As Object, e As EventArgs) Handles btnAddIncludeFile.Click
+
+        'set SDKFolder as late as possible to allow the user to change it previous to this
+        SDKFolder = txtSDKFolder.Text
+        FileSearchFor = txtSearchFiles.Text
+
+        frmAddFile.ShowDialog()
+
+    End Sub
 End Class

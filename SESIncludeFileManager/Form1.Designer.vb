@@ -33,7 +33,7 @@ Partial Class Form1
         Me.lbFiles = New System.Windows.Forms.ListBox()
         Me.txtSearchFiles = New System.Windows.Forms.TextBox()
         Me.btnReadProject = New System.Windows.Forms.Button()
-        Me.btnUpdateProject = New System.Windows.Forms.Button()
+        Me.btnSaveProject = New System.Windows.Forms.Button()
         Me.txtProjectFile = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.lvPaths = New System.Windows.Forms.ListView()
@@ -48,6 +48,7 @@ Partial Class Form1
         Me.mnuRemoveAllNotFoundFolders = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuAutoFormatPaths = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuToAbsolutePaths = New System.Windows.Forms.ToolStripMenuItem()
+        Me.btnAddIncludeFile = New System.Windows.Forms.Button()
         Me.cmsPathPopup.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -85,9 +86,9 @@ Partial Class Form1
         '
         'btnBrowseProject
         '
-        Me.btnBrowseProject.Location = New System.Drawing.Point(696, 64)
+        Me.btnBrowseProject.Location = New System.Drawing.Point(683, 64)
         Me.btnBrowseProject.Name = "btnBrowseProject"
-        Me.btnBrowseProject.Size = New System.Drawing.Size(75, 23)
+        Me.btnBrowseProject.Size = New System.Drawing.Size(88, 23)
         Me.btnBrowseProject.TabIndex = 4
         Me.btnBrowseProject.Text = "Browse"
         Me.btnBrowseProject.UseVisualStyleBackColor = True
@@ -128,21 +129,21 @@ Partial Class Form1
         '
         'btnReadProject
         '
-        Me.btnReadProject.Location = New System.Drawing.Point(683, 191)
+        Me.btnReadProject.Location = New System.Drawing.Point(683, 93)
         Me.btnReadProject.Name = "btnReadProject"
         Me.btnReadProject.Size = New System.Drawing.Size(88, 25)
         Me.btnReadProject.TabIndex = 10
         Me.btnReadProject.Text = "Read Project"
         Me.btnReadProject.UseVisualStyleBackColor = True
         '
-        'btnUpdateProject
+        'btnSaveProject
         '
-        Me.btnUpdateProject.Location = New System.Drawing.Point(683, 244)
-        Me.btnUpdateProject.Name = "btnUpdateProject"
-        Me.btnUpdateProject.Size = New System.Drawing.Size(88, 25)
-        Me.btnUpdateProject.TabIndex = 11
-        Me.btnUpdateProject.Text = "Update Project"
-        Me.btnUpdateProject.UseVisualStyleBackColor = True
+        Me.btnSaveProject.Location = New System.Drawing.Point(683, 155)
+        Me.btnSaveProject.Name = "btnSaveProject"
+        Me.btnSaveProject.Size = New System.Drawing.Size(88, 25)
+        Me.btnSaveProject.TabIndex = 11
+        Me.btnSaveProject.Text = "Save Project"
+        Me.btnSaveProject.UseVisualStyleBackColor = True
         '
         'txtProjectFile
         '
@@ -258,11 +259,22 @@ Partial Class Form1
         Me.mnuToAbsolutePaths.Size = New System.Drawing.Size(235, 22)
         Me.mnuToAbsolutePaths.Text = "To Absolute Paths"
         '
+        'btnAddIncludeFile
+        '
+        Me.btnAddIncludeFile.Enabled = False
+        Me.btnAddIncludeFile.Location = New System.Drawing.Point(683, 124)
+        Me.btnAddIncludeFile.Name = "btnAddIncludeFile"
+        Me.btnAddIncludeFile.Size = New System.Drawing.Size(88, 25)
+        Me.btnAddIncludeFile.TabIndex = 19
+        Me.btnAddIncludeFile.Text = "Add File"
+        Me.btnAddIncludeFile.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(783, 498)
+        Me.Controls.Add(Me.btnAddIncludeFile)
         Me.Controls.Add(Me.lblCountFiles)
         Me.Controls.Add(Me.lblCountFolders)
         Me.Controls.Add(Me.btnBrowseSDK)
@@ -270,7 +282,7 @@ Partial Class Form1
         Me.Controls.Add(Me.lvPaths)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.txtProjectFile)
-        Me.Controls.Add(Me.btnUpdateProject)
+        Me.Controls.Add(Me.btnSaveProject)
         Me.Controls.Add(Me.btnReadProject)
         Me.Controls.Add(Me.txtSearchFiles)
         Me.Controls.Add(Me.lbFiles)
@@ -301,7 +313,7 @@ Partial Class Form1
     Friend WithEvents lbFiles As ListBox
     Friend WithEvents txtSearchFiles As TextBox
     Friend WithEvents btnReadProject As Button
-    Friend WithEvents btnUpdateProject As Button
+    Friend WithEvents btnSaveProject As Button
     Friend WithEvents txtProjectFile As TextBox
     Friend WithEvents Label5 As Label
     Friend WithEvents lvPaths As ListView
@@ -316,4 +328,5 @@ Partial Class Form1
     Friend WithEvents mnuRemoveAllNotFoundFolders As ToolStripMenuItem
     Friend WithEvents mnuAutoFormatPaths As ToolStripMenuItem
     Friend WithEvents mnuToAbsolutePaths As ToolStripMenuItem
+    Friend WithEvents btnAddIncludeFile As Button
 End Class

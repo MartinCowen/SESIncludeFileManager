@@ -49,6 +49,36 @@ SESIncludeFileManager
  <param name="p">additional path</param>
  <returns></returns>
 </member>
+<member name="M:SESIncludeFileManager.Form1.GetListOfFilesInFolder(System.String,System.String)">
+ <summary>
+ Gets list of files in folder, top level only, combines folder name with project folder
+ </summary>
+ <param name="folder">folder in project</param>
+ <param name="filter">filter on filename eg "*.h"</param>
+ <returns></returns>
+</member>
+<member name="M:SESIncludeFileManager.Form1.FindFileNamesMatchingString(System.String,System.Collections.Generic.List{System.String})">
+ <summary>
+ Finds all strings in lstOriginal that match string s
+ </summary>
+ <param name="s">String to search for</param>
+ <param name="lstOriginal">List of strings to be searched</param>
+ <returns>List of Strings that matched</returns>
+</member>
+<member name="M:SESIncludeFileManager.Form1.FindFolderForFile(System.String)">
+ <summary>
+ Reverse lookup, find the folder for this file
+ </summary>
+ <param name="f">filename</param>
+ <returns>Foldername</returns>
+</member>
+<member name="M:SESIncludeFileManager.Form1.FiF_FoldersToArray(System.Collections.Generic.List{SESIncludeFileManager.Form1.FilesInFolder})">
+ <summary>
+ Converts list of FilesInFolder to an array of just the Folder names
+ </summary>
+ <param name="lFiF"></param>
+ <returns></returns>
+</member>
 <member name="M:SESIncludeFileManager.Form1.FindNearestFolderPath(System.String,System.String)">
  <summary>
  Works up the folder hierarchy until it finds folder
