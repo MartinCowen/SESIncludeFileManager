@@ -2,6 +2,7 @@
 Imports System.Collections.ObjectModel
 Imports System.IO
 
+
 Public Class Form1
     Private Class FilesInFolder
         Public filename As String
@@ -11,7 +12,6 @@ Public Class Form1
     Private lstFilesInFolders As New List(Of FilesInFolder)
     Private bManualSelectFile As Boolean
     Private Const NotFoundMarker As String = "!"
-    Private Const StudioDirToken As String = "$(StudioDir)"
     Private projFileLines() As String 'untrimmed, just each of the orignal lines in an array
     Private lineEndingChar As String = System.Environment.NewLine 'detect on read, use later on write back to file
 
@@ -103,10 +103,6 @@ Public Class Form1
     ''' <param name="p">additional path</param>
     ''' <returns></returns>
     Private Function DoesDirectoryExist(p As String) As Boolean
-        If p.StartsWith(StudioDirToken) Then
-            p = p.Replace(StudioDirToken, txtSDKFolder.Text)
-            Return My.Computer.FileSystem.DirectoryExists(p)
-        End If
         Return My.Computer.FileSystem.DirectoryExists(Path.GetFullPath(Path.Combine(txtProjectFolder.Text, p)))
     End Function
 
@@ -174,12 +170,7 @@ Public Class Form1
         Dim lstFiles As New List(Of String)
         If DoesDirectoryExist(folder) Then
             Dim p As String
-            If folder.StartsWith(StudioDirToken) Then
-                p = folder.Replace(StudioDirToken, txtSDKFolder.Text)
-            Else
-                p = My.Computer.FileSystem.CombinePath(txtProjectFolder.Text, folder)
-            End If
-
+            p = My.Computer.FileSystem.CombinePath(txtProjectFolder.Text, folder)
             res = My.Computer.FileSystem.GetFiles(p, FileIO.SearchOption.SearchTopLevelOnly, "*.h").ToArray
 
             For Each n As String In res
@@ -349,7 +340,11 @@ Public Class Form1
     End Function
 
     Private Sub btnUpdateProject_Click(sender As Object, e As EventArgs) Handles btnUpdateProject.Click
-        WriteProjectFile(IO.Path.Combine(txtProjectFolder.Text, txtProjectFile.Text))
+        Dim resp As DialogResult = MessageBox.Show("Overwrite project file." & vbCrLf & "Are you sure?", "About to write back to project file", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+
+        If resp = DialogResult.Yes Then
+            WriteProjectFile(IO.Path.Combine(txtProjectFolder.Text, txtProjectFile.Text))
+        End If
     End Sub
 
     Private Sub WriteProjectFile(filename As String)
@@ -385,7 +380,7 @@ Public Class Form1
         Try
             My.Computer.FileSystem.WriteAllText(filename, wholeFile, False)
         Catch ex As Exception
-            MessageBox.Show("Error while writing, " & ex.ToString)
+            MessageBox.Show("Error while writing to " & filename & vbCrLf & ex.ToString)
         End Try
     End Sub
 
@@ -503,8 +498,6 @@ Public Class Form1
             If Not relPathInc.Contains("..\") Then 'abs path so starts with sdk folder, remove that leaving eg "\components\ble"
                 If relPathInc.StartsWith(txtSDKFolder.Text) Then
                     relPathInc = relPathInc.Replace(txtSDKFolder.Text & "\", "")
-                ElseIf relPathInc.StartsWith(StudioDirToken) Then
-                    relPathInc = relPathInc.Replace(StudioDirToken & "\", "")
                 Else
                     'skip this one, nothing can be done. must be a different sdk so no way to automatically know where to split this between sdk path and includes
                     unhandledPaths.Add(relPathInc)
@@ -661,26 +654,4 @@ Public Class Form1
         Return updatedItems.ToArray
     End Function
 
-    Private Sub mnuToStudioDirPaths_Click(sender As Object, e As EventArgs) Handles mnuToStudioDirPaths.Click
-        Me.Cursor = Cursors.WaitCursor
-        Dim ar As Array
-        ar = PathsToStudioDir(lvPaths)
-        UpdatePathList(ar)
-        Me.Cursor = Cursors.Default
-    End Sub
-
-    Private Function PathsToStudioDir(lv As ListView) As Array
-        Dim updatedItems As New ArrayList
-        For Each lvi As ListViewItem In lv.Items
-            If lvi.Selected Then
-                Dim studiodirpath As String = CombinePathWithRelative(txtProjectFolder.Text, lvi.Text.Replace("/", "\")) 'abs path at this point
-                studiodirpath = studiodirpath.Replace(txtSDKFolder.Text, StudioDirToken)
-                studiodirpath = studiodirpath.Replace("\", "/")
-                updatedItems.Add(studiodirpath)
-            Else
-                updatedItems.Add(lvi.Text)
-            End If
-        Next lvi
-        Return updatedItems.ToArray
-    End Function
 End Class

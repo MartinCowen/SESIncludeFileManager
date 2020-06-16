@@ -124,9 +124,6 @@
   <data name="c_colon_white_bg_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>c colon white bg icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="dollar_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>dollar icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="dot_dot_slash_white_bg_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>dot dot slash white bg icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

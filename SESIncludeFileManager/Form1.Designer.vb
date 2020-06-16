@@ -48,7 +48,6 @@ Partial Class Form1
         Me.mnuRemoveAllNotFoundFolders = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuAutoFormatPaths = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuToAbsolutePaths = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuToStudioDirPaths = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmsPathPopup.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -227,9 +226,9 @@ Partial Class Form1
         '
         'cmsPathPopup
         '
-        Me.cmsPathPopup.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuRemoveFolder, Me.mnuRemoveAllNotFoundFolders, Me.mnuAutoFormatPaths, Me.mnuToAbsolutePaths, Me.mnuToStudioDirPaths})
+        Me.cmsPathPopup.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuRemoveFolder, Me.mnuRemoveAllNotFoundFolders, Me.mnuAutoFormatPaths, Me.mnuToAbsolutePaths})
         Me.cmsPathPopup.Name = "cmsPathPopup"
-        Me.cmsPathPopup.Size = New System.Drawing.Size(236, 114)
+        Me.cmsPathPopup.Size = New System.Drawing.Size(236, 92)
         '
         'mnuRemoveFolder
         '
@@ -250,7 +249,7 @@ Partial Class Form1
         Me.mnuAutoFormatPaths.Image = Global.SESIncludeFileManager.My.Resources.Resources.dot_dot_slash_white_bg_icon
         Me.mnuAutoFormatPaths.Name = "mnuAutoFormatPaths"
         Me.mnuAutoFormatPaths.Size = New System.Drawing.Size(235, 22)
-        Me.mnuAutoFormatPaths.Text = "Auto Format Relative Paths"
+        Me.mnuAutoFormatPaths.Text = "All To Relative Paths"
         '
         'mnuToAbsolutePaths
         '
@@ -258,13 +257,6 @@ Partial Class Form1
         Me.mnuToAbsolutePaths.Name = "mnuToAbsolutePaths"
         Me.mnuToAbsolutePaths.Size = New System.Drawing.Size(235, 22)
         Me.mnuToAbsolutePaths.Text = "To Absolute Paths"
-        '
-        'mnuToStudioDirPaths
-        '
-        Me.mnuToStudioDirPaths.Image = Global.SESIncludeFileManager.My.Resources.Resources.dollar_icon
-        Me.mnuToStudioDirPaths.Name = "mnuToStudioDirPaths"
-        Me.mnuToStudioDirPaths.Size = New System.Drawing.Size(235, 22)
-        Me.mnuToStudioDirPaths.Text = "To StudioDir Paths"
         '
         'Form1
         '
@@ -324,5 +316,4 @@ Partial Class Form1
     Friend WithEvents mnuRemoveAllNotFoundFolders As ToolStripMenuItem
     Friend WithEvents mnuAutoFormatPaths As ToolStripMenuItem
     Friend WithEvents mnuToAbsolutePaths As ToolStripMenuItem
-    Friend WithEvents mnuToStudioDirPaths As ToolStripMenuItem
 End Class
