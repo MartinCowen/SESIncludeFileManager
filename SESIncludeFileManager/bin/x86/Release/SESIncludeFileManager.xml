@@ -1,0 +1,87 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+SESIncludeFileManager
+</name>
+</assembly>
+<members>
+<member name="T:SESIncludeFileManager.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:SESIncludeFileManager.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:SESIncludeFileManager.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:SESIncludeFileManager.My.Resources.Resources.broom_icon1">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:SESIncludeFileManager.My.Resources.Resources.c_colon_white_bg_icon">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:SESIncludeFileManager.My.Resources.Resources.dot_dot_slash_white_bg_icon">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:SESIncludeFileManager.My.Resources.Resources.red_cross_icon">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="M:SESIncludeFileManager.Form1.DoesDirectoryExist(System.String)">
+ <summary>
+ Checks for folder existing relative to the reference path
+ </summary>
+ <param name="p">additional path</param>
+ <returns></returns>
+</member>
+<member name="M:SESIncludeFileManager.Form1.FindNearestFolderPath(System.String,System.String)">
+ <summary>
+ Works up the folder hierarchy until it finds folder
+ </summary>
+ <param name="folder">folder to find</param>
+ <param name="startFolder">starting folder</param>
+ <returns>Absolute path to folder</returns>
+</member>
+<member name="M:SESIncludeFileManager.Form1.GetRelativePath(System.String,System.String)">
+ <summary>
+ Gets the relative path to pathAbsWithRel folder from pathAbsProj folder
+ </summary>
+ <param name="pathAbsProj">Starting folder</param>
+ <param name="pathAbsWithRel">Folder to get to</param>
+ <returns>Relative path</returns>
+</member>
+<member name="M:SESIncludeFileManager.Form1.CombinePathWithRelative(System.String,System.String)">
+ <summary>
+ Combines paths when relPath can start with "..\" or "." or "\"
+ Does not cope with mixture of "..\" and "." in relPath
+ </summary>
+ <param name="basePath">Base Path</param>
+ <param name="relPath">Relative Path</param>
+ <returns>Combined Path</returns>
+</member>
+<member name="M:SESIncludeFileManager.Form1.AssembleStringN(System.String[],System.String,System.Int32)">
+ <summary>
+ Assembles a string from an array and a seperator character up to n sections
+ </summary>
+ <param name="s">Array of sections</param>
+ <param name="sep">Seperator Character</param>
+ <param name="n">Number of sections you want</param>
+ <returns>Assembled string</returns>
+</member>
+</members>
+</doc>
