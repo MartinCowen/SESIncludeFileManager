@@ -61,7 +61,6 @@ Public Class Form1
 
         If Not foundincludesline Then MessageBox.Show("Project file does not include a line with c_user_include_directories")
 
-        '//>sIncludes = "../debug;../;../../../../../../components/device;../../../../../../components/toolchain/cmsis/include"
         Dim lst As Array = sIncludes.Split(";".ToCharArray, StringSplitOptions.RemoveEmptyEntries)
 
         UpdatePathList(lst)
@@ -193,16 +192,13 @@ Public Class Form1
         If e.KeyCode = Keys.Enter Then UpdateLbFiles()
     End Sub
     Private Sub UpdateLbFiles()
-        If txtSearchFiles.Text <> "" Then
 
-            lbFiles.Items.Clear()
-            Dim lstFileNames As New List(Of String)
-            For Each fif As FilesInFolder In lstFilesInFolders
-                lstFileNames.Add(fif.filename)
-            Next fif
-            lbFiles.Items.AddRange(FindFileNamesMatchingString(txtSearchFiles.Text, lstFileNames).ToArray)
-
-        End If
+        lbFiles.Items.Clear()
+        Dim lstFileNames As New List(Of String)
+        For Each fif As FilesInFolder In lstFilesInFolders
+            lstFileNames.Add(fif.filename)
+        Next fif
+        lbFiles.Items.AddRange(FindFileNamesMatchingString(txtSearchFiles.Text, lstFileNames).ToArray)
 
         lblCountFiles.Text = "Total: " & lbFiles.Items.Count
 
@@ -315,18 +311,26 @@ Public Class Form1
         End If
     End Sub
 
-    Private Function lstFileInFolder_NewFolderName(oName As String, nName As String) As Boolean
+    Private Sub lstFileInFolder_NewFolderName(oName As String, nName As String)
 
-        For Each fif As FilesInFolder In lstFilesInFolders
-            If fif.folder = oName Then
-                fif.folder = nName
+        Dim ar As Array
+        ar = FiF_FoldersToArray(lstFilesInFolders)
 
-                UpdatePathList(FiF_FoldersToArray(lstFilesInFolders))
-                Return True
+        Dim arl As New ArrayList
+        arl.AddRange(ar)
+
+        For i As Integer = ar.Length - 1 To 0 Step -1
+            If ar(i) = oName Then
+                arl.Remove(oName)
             End If
-        Next fif
-        Return False 'no path found, maybe that path had no files in it.
-    End Function
+        Next i
+
+        'always add new name. Not just if found old one and its a replacement. Might not be in the lstFileInFolders because had no files associated with it.
+        arl.Add(nName)
+
+        UpdatePathList(arl.ToArray)
+
+    End Sub
 
     Private Function FiF_FoldersToArray(lFiF As List(Of FilesInFolder)) As Array
 
