@@ -48,7 +48,7 @@ Partial Class Form1
         Me.mnuRemoveAllNotFoundFolders = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuAutoFormatPaths = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuToAbsolutePaths = New System.Windows.Forms.ToolStripMenuItem()
-        Me.btnAddIncludeFile = New System.Windows.Forms.Button()
+        Me.btnAddIncludeFolder = New System.Windows.Forms.Button()
         Me.cmsPathPopup.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -259,22 +259,22 @@ Partial Class Form1
         Me.mnuToAbsolutePaths.Size = New System.Drawing.Size(235, 22)
         Me.mnuToAbsolutePaths.Text = "To Absolute Paths"
         '
-        'btnAddIncludeFile
+        'btnAddIncludeFolder
         '
-        Me.btnAddIncludeFile.Enabled = False
-        Me.btnAddIncludeFile.Location = New System.Drawing.Point(683, 124)
-        Me.btnAddIncludeFile.Name = "btnAddIncludeFile"
-        Me.btnAddIncludeFile.Size = New System.Drawing.Size(88, 25)
-        Me.btnAddIncludeFile.TabIndex = 19
-        Me.btnAddIncludeFile.Text = "Add File"
-        Me.btnAddIncludeFile.UseVisualStyleBackColor = True
+        Me.btnAddIncludeFolder.Enabled = False
+        Me.btnAddIncludeFolder.Location = New System.Drawing.Point(683, 124)
+        Me.btnAddIncludeFolder.Name = "btnAddIncludeFolder"
+        Me.btnAddIncludeFolder.Size = New System.Drawing.Size(88, 25)
+        Me.btnAddIncludeFolder.TabIndex = 19
+        Me.btnAddIncludeFolder.Text = "Add Folder"
+        Me.btnAddIncludeFolder.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(783, 498)
-        Me.Controls.Add(Me.btnAddIncludeFile)
+        Me.Controls.Add(Me.btnAddIncludeFolder)
         Me.Controls.Add(Me.lblCountFiles)
         Me.Controls.Add(Me.lblCountFolders)
         Me.Controls.Add(Me.btnBrowseSDK)
@@ -328,5 +328,5 @@ Partial Class Form1
     Friend WithEvents mnuRemoveAllNotFoundFolders As ToolStripMenuItem
     Friend WithEvents mnuAutoFormatPaths As ToolStripMenuItem
     Friend WithEvents mnuToAbsolutePaths As ToolStripMenuItem
-    Friend WithEvents btnAddIncludeFile As Button
+    Friend WithEvents btnAddIncludeFolder As Button
 End Class

@@ -202,7 +202,7 @@ Public Class Form1
 
     Private Sub txtSearchFiles_TextChanged(sender As Object, e As EventArgs) Handles txtSearchFiles.TextChanged
         UpdateLbFiles()
-        btnAddIncludeFile.Enabled = (txtSearchFiles.Text <> "")
+        btnAddIncludeFolder.Enabled = (txtSearchFiles.Text <> "")
     End Sub
     Private Sub txtSearchFiles_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSearchFiles.KeyDown
         If e.KeyCode = Keys.Enter Then UpdateLbFiles()
@@ -687,13 +687,13 @@ Public Class Form1
         Return updatedItems.ToArray
     End Function
 
-    Private Sub btnAddIncludeFile_Click(sender As Object, e As EventArgs) Handles btnAddIncludeFile.Click
+    Private Sub btnAddIncludeFile_Click(sender As Object, e As EventArgs) Handles btnAddIncludeFolder.Click
 
         'set SDKFolder as late as possible to allow the user to change it previous to this
         SDKFolder = txtSDKFolder.Text
         FileSearchFor = txtSearchFiles.Text
 
-        frmAddFile.ShowDialog()
+        frmAddFolder.ShowDialog()
 
     End Sub
 End Class

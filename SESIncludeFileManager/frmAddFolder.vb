@@ -1,7 +1,7 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.IO
 
-Public Class frmAddFile
+Public Class frmAddFolder
     Private WithEvents tmrStartup As New Timer
     Private dirs As ReadOnlyCollection(Of String)
     Private files As ReadOnlyCollection(Of String)
@@ -91,11 +91,11 @@ Public Class frmAddFile
 
     Private Sub cmbFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFiles.SelectedIndexChanged
         If cmbFiles.SelectedIndex < 0 Then
-            btnAddFile.Enabled = False
+            btnAddFolder.Enabled = False
             Exit Sub
         End If
 
         lblFileFolder.Text = lstFilteredFilesInFolders(cmbFiles.SelectedIndex).folder.Replace(Form1.SDKFolder, "")
-        btnAddFile.Enabled = True
+        btnAddFolder.Enabled = True
     End Sub
 End Class
