@@ -22,7 +22,6 @@ Partial Class frmAddFile
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.lblProgress = New System.Windows.Forms.Label()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.lblItemProgress = New System.Windows.Forms.Label()
         Me.cmbFiles = New System.Windows.Forms.ComboBox()
@@ -30,16 +29,8 @@ Partial Class frmAddFile
         Me.btnAddFile = New System.Windows.Forms.Button()
         Me.txtSearchFor = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.lblFileFolder = New System.Windows.Forms.Label()
         Me.SuspendLayout()
-        '
-        'lblProgress
-        '
-        Me.lblProgress.AutoSize = True
-        Me.lblProgress.Location = New System.Drawing.Point(264, 51)
-        Me.lblProgress.Name = "lblProgress"
-        Me.lblProgress.Size = New System.Drawing.Size(64, 13)
-        Me.lblProgress.TabIndex = 0
-        Me.lblProgress.Text = "Searching..."
         '
         'ProgressBar1
         '
@@ -62,7 +53,7 @@ Partial Class frmAddFile
         'cmbFiles
         '
         Me.cmbFiles.FormattingEnabled = True
-        Me.cmbFiles.Location = New System.Drawing.Point(66, 99)
+        Me.cmbFiles.Location = New System.Drawing.Point(66, 124)
         Me.cmbFiles.Name = "cmbFiles"
         Me.cmbFiles.Size = New System.Drawing.Size(285, 21)
         Me.cmbFiles.TabIndex = 3
@@ -70,7 +61,7 @@ Partial Class frmAddFile
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(26, 102)
+        Me.Label1.Location = New System.Drawing.Point(26, 127)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(23, 13)
         Me.Label1.TabIndex = 4
@@ -78,7 +69,8 @@ Partial Class frmAddFile
         '
         'btnAddFile
         '
-        Me.btnAddFile.Location = New System.Drawing.Point(357, 99)
+        Me.btnAddFile.Enabled = False
+        Me.btnAddFile.Location = New System.Drawing.Point(357, 124)
         Me.btnAddFile.Name = "btnAddFile"
         Me.btnAddFile.Size = New System.Drawing.Size(75, 23)
         Me.btnAddFile.TabIndex = 5
@@ -87,25 +79,35 @@ Partial Class frmAddFile
         '
         'txtSearchFor
         '
-        Me.txtSearchFor.Location = New System.Drawing.Point(105, 71)
+        Me.txtSearchFor.Location = New System.Drawing.Point(66, 71)
         Me.txtSearchFor.Name = "txtSearchFor"
-        Me.txtSearchFor.Size = New System.Drawing.Size(246, 20)
+        Me.txtSearchFor.Size = New System.Drawing.Size(285, 20)
         Me.txtSearchFor.TabIndex = 6
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(26, 74)
+        Me.Label2.Location = New System.Drawing.Point(17, 74)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(73, 13)
+        Me.Label2.Size = New System.Drawing.Size(43, 13)
         Me.Label2.TabIndex = 7
-        Me.Label2.Text = "Searching For"
+        Me.Label2.Text = "Filter by"
+        '
+        'lblFileFolder
+        '
+        Me.lblFileFolder.AutoSize = True
+        Me.lblFileFolder.Location = New System.Drawing.Point(69, 108)
+        Me.lblFileFolder.Name = "lblFileFolder"
+        Me.lblFileFolder.Size = New System.Drawing.Size(10, 13)
+        Me.lblFileFolder.TabIndex = 8
+        Me.lblFileFolder.Text = "-"
         '
         'frmAddFile
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(464, 143)
+        Me.ClientSize = New System.Drawing.Size(464, 157)
+        Me.Controls.Add(Me.lblFileFolder)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.txtSearchFor)
         Me.Controls.Add(Me.btnAddFile)
@@ -113,7 +115,6 @@ Partial Class frmAddFile
         Me.Controls.Add(Me.cmbFiles)
         Me.Controls.Add(Me.lblItemProgress)
         Me.Controls.Add(Me.ProgressBar1)
-        Me.Controls.Add(Me.lblProgress)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
         Me.Name = "frmAddFile"
@@ -122,8 +123,6 @@ Partial Class frmAddFile
         Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents lblProgress As Label
     Friend WithEvents ProgressBar1 As ProgressBar
     Friend WithEvents lblItemProgress As Label
     Friend WithEvents cmbFiles As ComboBox
@@ -131,4 +130,5 @@ Partial Class frmAddFile
     Friend WithEvents btnAddFile As Button
     Friend WithEvents txtSearchFor As TextBox
     Friend WithEvents Label2 As Label
+    Friend WithEvents lblFileFolder As Label
 End Class
