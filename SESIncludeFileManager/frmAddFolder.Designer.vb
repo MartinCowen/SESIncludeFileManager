@@ -31,13 +31,14 @@ Partial Class frmAddFolder
         Me.Label2 = New System.Windows.Forms.Label()
         Me.lblFileFolder = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.chkAsRelPath = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'ProgressBar1
         '
         Me.ProgressBar1.Location = New System.Drawing.Point(15, 25)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(336, 23)
+        Me.ProgressBar1.Size = New System.Drawing.Size(354, 23)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous
         Me.ProgressBar1.TabIndex = 1
         '
@@ -54,15 +55,15 @@ Partial Class frmAddFolder
         'cmbFiles
         '
         Me.cmbFiles.FormattingEnabled = True
-        Me.cmbFiles.Location = New System.Drawing.Point(66, 124)
+        Me.cmbFiles.Location = New System.Drawing.Point(66, 107)
         Me.cmbFiles.Name = "cmbFiles"
-        Me.cmbFiles.Size = New System.Drawing.Size(285, 21)
+        Me.cmbFiles.Size = New System.Drawing.Size(303, 21)
         Me.cmbFiles.TabIndex = 3
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(26, 127)
+        Me.Label1.Location = New System.Drawing.Point(26, 110)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(23, 13)
         Me.Label1.TabIndex = 4
@@ -71,7 +72,7 @@ Partial Class frmAddFolder
         'btnAddFolder
         '
         Me.btnAddFolder.Enabled = False
-        Me.btnAddFolder.Location = New System.Drawing.Point(357, 98)
+        Me.btnAddFolder.Location = New System.Drawing.Point(379, 81)
         Me.btnAddFolder.Name = "btnAddFolder"
         Me.btnAddFolder.Size = New System.Drawing.Size(75, 23)
         Me.btnAddFolder.TabIndex = 5
@@ -80,15 +81,15 @@ Partial Class frmAddFolder
         '
         'txtSearchFor
         '
-        Me.txtSearchFor.Location = New System.Drawing.Point(66, 71)
+        Me.txtSearchFor.Location = New System.Drawing.Point(66, 54)
         Me.txtSearchFor.Name = "txtSearchFor"
-        Me.txtSearchFor.Size = New System.Drawing.Size(285, 20)
+        Me.txtSearchFor.Size = New System.Drawing.Size(303, 20)
         Me.txtSearchFor.TabIndex = 6
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(17, 74)
+        Me.Label2.Location = New System.Drawing.Point(17, 57)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(43, 13)
         Me.Label2.TabIndex = 7
@@ -98,7 +99,8 @@ Partial Class frmAddFolder
         '
         Me.lblFileFolder.AutoSize = True
         Me.lblFileFolder.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblFileFolder.Location = New System.Drawing.Point(63, 103)
+        Me.lblFileFolder.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblFileFolder.Location = New System.Drawing.Point(66, 85)
         Me.lblFileFolder.Name = "lblFileFolder"
         Me.lblFileFolder.Size = New System.Drawing.Size(12, 15)
         Me.lblFileFolder.TabIndex = 8
@@ -107,17 +109,28 @@ Partial Class frmAddFolder
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(17, 103)
+        Me.Label3.Location = New System.Drawing.Point(17, 86)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(36, 13)
         Me.Label3.TabIndex = 9
         Me.Label3.Text = "Folder"
         '
+        'chkAsRelPath
+        '
+        Me.chkAsRelPath.AutoSize = True
+        Me.chkAsRelPath.Location = New System.Drawing.Point(460, 84)
+        Me.chkAsRelPath.Name = "chkAsRelPath"
+        Me.chkAsRelPath.Size = New System.Drawing.Size(87, 17)
+        Me.chkAsRelPath.TabIndex = 10
+        Me.chkAsRelPath.Text = "Use Relative"
+        Me.chkAsRelPath.UseVisualStyleBackColor = True
+        '
         'frmAddFolder
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(464, 157)
+        Me.ClientSize = New System.Drawing.Size(546, 139)
+        Me.Controls.Add(Me.chkAsRelPath)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.lblFileFolder)
         Me.Controls.Add(Me.Label2)
@@ -144,4 +157,5 @@ Partial Class frmAddFolder
     Friend WithEvents Label2 As Label
     Friend WithEvents lblFileFolder As Label
     Friend WithEvents Label3 As Label
+    Friend WithEvents chkAsRelPath As CheckBox
 End Class

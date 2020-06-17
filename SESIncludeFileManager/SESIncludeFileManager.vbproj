@@ -104,10 +104,10 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmAddFile.Designer.vb">
-      <DependentUpon>frmAddFile.vb</DependentUpon>
+    <Compile Include="frmAddFolder.Designer.vb">
+      <DependentUpon>frmAddFolder.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmAddFile.vb">
+    <Compile Include="frmAddFolder.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GlobalSuppressions.vb" />
@@ -131,8 +131,8 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmAddFile.resx">
-      <DependentUpon>frmAddFile.vb</DependentUpon>
+    <EmbeddedResource Include="frmAddFolder.resx">
+      <DependentUpon>frmAddFolder.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

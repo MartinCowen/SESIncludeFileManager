@@ -693,7 +693,45 @@ Public Class Form1
         SDKFolder = txtSDKFolder.Text
         FileSearchFor = txtSearchFiles.Text
 
-        frmAddFolder.ShowDialog()
+        frmAddFolder.Show()
 
     End Sub
+
+    Friend Sub AddFolder(f As String, asRelPath As Boolean)
+        'check if already exists before allowing it to be added
+
+        If IsFolderInFIF(f) Then
+            MessageBox.Show("Folder " & f & " is already in list!", "Folder Not Added")
+            Exit Sub
+        Else
+            Dim arl As New ArrayList
+            arl.AddRange(FiF_FoldersToArray(lstFilesInFolders))
+
+            If asRelPath Then
+                Dim updatedRelPath As String = GetRelativePath(txtProjectFolder.Text, f)
+                f = updatedRelPath.Replace("\", "/") 'restore the forward slashes
+            End If
+
+            arl.Add(f)
+            UpdatePathList(arl.ToArray)
+        End If
+    End Sub
+
+    Private Function IsFolderInFIF(folderAbs As String) As Boolean
+        Dim found As Boolean = False
+        Dim arl As New ArrayList
+        arl.AddRange(FiF_FoldersToArray(lstFilesInFolders))
+
+        For Each s As String In arl
+            'compare using contains because one path might be abs and another relative
+            Dim searchAbs As String = CombinePathWithRelative(txtProjectFolder.Text, s.Replace("/", "\"))
+
+            If folderAbs = searchAbs Then
+                found = True
+                Exit For
+            End If
+        Next s
+        Return found
+    End Function
+
 End Class

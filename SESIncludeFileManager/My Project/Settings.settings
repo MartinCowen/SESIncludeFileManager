@@ -11,5 +11,8 @@
     <Setting Name="SESProjectFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Bluetooth\Nordic_Semi\nRF5_SDK_12.3.0_d7731ad\examples\ble_central\experimental\ble_app_blinky_c\pca10028\s130\ses</Value>
     </Setting>
+    <Setting Name="AddFolderAsRelativePath" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

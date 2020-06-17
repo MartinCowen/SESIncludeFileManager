@@ -44,11 +44,11 @@ Partial Class Form1
         Me.lblCountFolders = New System.Windows.Forms.Label()
         Me.lblCountFiles = New System.Windows.Forms.Label()
         Me.cmsPathPopup = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.btnAddIncludeFolder = New System.Windows.Forms.Button()
         Me.mnuRemoveFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuRemoveAllNotFoundFolders = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuAutoFormatPaths = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuToAbsolutePaths = New System.Windows.Forms.ToolStripMenuItem()
-        Me.btnAddIncludeFolder = New System.Windows.Forms.Button()
         Me.cmsPathPopup.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -231,6 +231,16 @@ Partial Class Form1
         Me.cmsPathPopup.Name = "cmsPathPopup"
         Me.cmsPathPopup.Size = New System.Drawing.Size(236, 92)
         '
+        'btnAddIncludeFolder
+        '
+        Me.btnAddIncludeFolder.Enabled = False
+        Me.btnAddIncludeFolder.Location = New System.Drawing.Point(683, 124)
+        Me.btnAddIncludeFolder.Name = "btnAddIncludeFolder"
+        Me.btnAddIncludeFolder.Size = New System.Drawing.Size(88, 25)
+        Me.btnAddIncludeFolder.TabIndex = 19
+        Me.btnAddIncludeFolder.Text = "Add Folder..."
+        Me.btnAddIncludeFolder.UseVisualStyleBackColor = True
+        '
         'mnuRemoveFolder
         '
         Me.mnuRemoveFolder.Image = Global.SESIncludeFileManager.My.Resources.Resources.red_cross_icon
@@ -258,16 +268,6 @@ Partial Class Form1
         Me.mnuToAbsolutePaths.Name = "mnuToAbsolutePaths"
         Me.mnuToAbsolutePaths.Size = New System.Drawing.Size(235, 22)
         Me.mnuToAbsolutePaths.Text = "To Absolute Paths"
-        '
-        'btnAddIncludeFolder
-        '
-        Me.btnAddIncludeFolder.Enabled = False
-        Me.btnAddIncludeFolder.Location = New System.Drawing.Point(683, 124)
-        Me.btnAddIncludeFolder.Name = "btnAddIncludeFolder"
-        Me.btnAddIncludeFolder.Size = New System.Drawing.Size(88, 25)
-        Me.btnAddIncludeFolder.TabIndex = 19
-        Me.btnAddIncludeFolder.Text = "Add Folder"
-        Me.btnAddIncludeFolder.UseVisualStyleBackColor = True
         '
         'Form1
         '

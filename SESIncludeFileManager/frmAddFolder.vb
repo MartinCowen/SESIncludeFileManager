@@ -1,5 +1,5 @@
 ﻿Imports System.Collections.ObjectModel
-Imports System.IO
+
 
 Public Class frmAddFolder
     Private WithEvents tmrStartup As New Timer
@@ -12,36 +12,42 @@ Public Class frmAddFolder
     Private Sub frmAddFile_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         'allow form to be painted before starting CPU intensive task
-        tmrStartup.Interval = 1
+        tmrStartup.Interval = 20
         tmrStartup.Start()
-
+        chkAsRelPath.Checked = My.Settings.AddFolderAsRelativePath
 
     End Sub
 
-    Private Sub tmrStartup_Tick(sender As Object, e As EventArgs) Handles tmrStartup.Tick
-        tmrStartup.Stop()
+    Private Sub StartUp()
 
-        Me.Cursor = Cursors.WaitCursor
-        lblItemProgress.Text = "Finding Folders in " & Form1.SDKFolder
+        lblItemProgress.Text = "Wait... Finding Folders in " & Form1.SDKFolder
         lblItemProgress.Refresh()
         ProgressBar1.Visible = True
+
+        Cursor = Cursors.WaitCursor
+        'this line take several seconds
         dirs = My.Computer.FileSystem.GetDirectories(Form1.SDKFolder, FileIO.SearchOption.SearchAllSubDirectories)
+        Cursor = Cursors.Default
 
         GetAllFiles()
 
         txtSearchFor.Text = Form1.FileSearchFor
 
-        Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub tmrStartup_Tick(sender As Object, e As EventArgs) Handles tmrStartup.Tick
+        tmrStartup.Stop()
+        StartUp()
     End Sub
     Private Sub UpdateCmbFilteredFiles()
-        Me.Cursor = Cursors.WaitCursor
+
         cmbFiles.BeginUpdate()
         cmbFiles.Items.Clear()
         For Each fif As Form1.FilesInFolder In lstFilteredFilesInFolders
             cmbFiles.Items.Add(fif.filename)
         Next fif
         cmbFiles.EndUpdate()
-        Me.Cursor = Cursors.Default
+
     End Sub
 
     Private Sub GetAllFiles()
@@ -87,6 +93,7 @@ Public Class frmAddFolder
 
         UpdateCmbFilteredFiles()
         cmbFiles.Text = ""
+        lblItemProgress.Text = "Files Matching : " & lstFilteredFilesInFolders.Count
     End Sub
 
     Private Sub cmbFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbFiles.SelectedIndexChanged
@@ -97,5 +104,13 @@ Public Class frmAddFolder
 
         lblFileFolder.Text = lstFilteredFilesInFolders(cmbFiles.SelectedIndex).folder.Replace(Form1.SDKFolder, "")
         btnAddFolder.Enabled = True
+    End Sub
+
+    Private Sub btnAddFolder_Click(sender As Object, e As EventArgs) Handles btnAddFolder.Click
+        Form1.AddFolder(lstFilteredFilesInFolders(cmbFiles.SelectedIndex).folder, chkAsRelPath.Checked) 'absolute path but with option to convert to relative
+    End Sub
+
+    Private Sub chkAsRelPath_CheckedChanged(sender As Object, e As EventArgs) Handles chkAsRelPath.CheckedChanged
+        My.Settings.AddFolderAsRelativePath = chkAsRelPath.Checked
     End Sub
 End Class
