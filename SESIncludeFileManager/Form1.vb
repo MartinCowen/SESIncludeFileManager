@@ -202,7 +202,6 @@ Public Class Form1
 
     Private Sub txtSearchFiles_TextChanged(sender As Object, e As EventArgs) Handles txtSearchFiles.TextChanged
         UpdateLbFiles()
-        btnAddIncludeFolder.Enabled = (txtSearchFiles.Text <> "")
     End Sub
     Private Sub txtSearchFiles_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSearchFiles.KeyDown
         If e.KeyCode = Keys.Enter Then UpdateLbFiles()

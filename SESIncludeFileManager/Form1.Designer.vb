@@ -233,7 +233,6 @@ Partial Class Form1
         '
         'btnAddIncludeFolder
         '
-        Me.btnAddIncludeFolder.Enabled = False
         Me.btnAddIncludeFolder.Location = New System.Drawing.Point(683, 124)
         Me.btnAddIncludeFolder.Name = "btnAddIncludeFolder"
         Me.btnAddIncludeFolder.Size = New System.Drawing.Size(88, 25)

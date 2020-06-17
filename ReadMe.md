@@ -40,6 +40,16 @@ When Only Show Files in Selected Folder is unchecked the text box above the Incl
 ### Edit an Include Path
 Double click on the Include Path item to bring up and edit box containing the existing value. Since the list is sorted, it may return to a different place in the list when altered. If the path does not exist an exclamation point will be shown against that path.
 
+## Add Folder
+![SESIFM Add Folder Dialog](SESIFM_add_folder.png)
+
+Add Folder... button brings up an Add Folder dialog box. If you have already started searching for a file in the main dialog, that search text is used in the Add Folder dialog.
+
+There is a short wait while the file system is searched for suitable include files and folders (all *.h files in the SDK folder excluding the examples folder). A progress bar is shown while searching and the current folder being loaded is shown.
+
+Filter by some partial string and the list of files containing that string are shown in the dropdown box. As each one is selected, the containing folder is displayed. Add that folder to the Include Paths by clicking Add Folder. By default the path used is relative to the current project but that can be changed to absolute paths by changing the Use Relative checkbox.  
+
+As the Filter By text is changed, the number of matching files is displayed. You may add multiple files and see the results in the main form without closing the Add Folder dialog. Folders that already exist are not added again and a message is shown.  
 
 ### Update Project
 Writes back to the emProject file. Only the c_user_include_directories line will be changed. Line endings are auto detected when the file is read and are used when the file is written.
